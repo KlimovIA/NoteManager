@@ -1,10 +1,10 @@
-﻿using EducationHelper.CommonTypes.Data;
-using EducationHelper.CommonTypes.Enums;
+﻿using NoteManager.CommonTypes.Data;
+using NoteManager.CommonTypes.Enums;
 using Microsoft.Data.Sqlite;
 using System.Text;
 using System.Xml.Linq;
 
-namespace EducationHelper.Database
+namespace NoteManager.Database
 {
     internal class DatabaseManager
     {

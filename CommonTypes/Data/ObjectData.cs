@@ -1,7 +1,7 @@
-﻿using EducationHelper.CommonTypes.Enums;
+﻿using NoteManager.CommonTypes.Enums;
 using System.Text;
 
-namespace EducationHelper.CommonTypes.Data
+namespace NoteManager.CommonTypes.Data
 {
 
     public class ObjectData

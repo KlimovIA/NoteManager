@@ -1,4 +1,4 @@
-﻿namespace EducationHelper
+﻿namespace NoteManager
 {
     partial class MainForm
     {
@@ -42,7 +42,7 @@
             this.tsAddNote = new System.Windows.Forms.ToolStripMenuItem();
             this.tsBtnRemoveNode = new System.Windows.Forms.ToolStripButton();
             this.pnlMainContainer = new System.Windows.Forms.Panel();
-            this.ncNote = new EducationHelper.Visual.NoteControl();
+            this.ncNote = new NoteManager.Visual.NoteControl();
             this.pnlApplyChanges = new System.Windows.Forms.Panel();
             this.lbActionStatus = new System.Windows.Forms.Label();
             this.btnApplyChanges = new System.Windows.Forms.Button();
@@ -92,7 +92,7 @@
             // 
             // miAddFolder
             // 
-            this.miAddFolder.Image = global::EducationHelper.Properties.Resources.FolderIcon;
+            this.miAddFolder.Image = global::NoteManager.Properties.Resources.FolderIcon;
             this.miAddFolder.Name = "miAddFolder";
             this.miAddFolder.Size = new System.Drawing.Size(163, 22);
             this.miAddFolder.Text = "Создать папку";
@@ -100,7 +100,7 @@
             // 
             // miAddNote
             // 
-            this.miAddNote.Image = global::EducationHelper.Properties.Resources.NoteIcon;
+            this.miAddNote.Image = global::NoteManager.Properties.Resources.NoteIcon;
             this.miAddNote.Name = "miAddNote";
             this.miAddNote.Size = new System.Drawing.Size(163, 22);
             this.miAddNote.Text = "Создать заметку";
@@ -108,7 +108,7 @@
             // 
             // miDeleteNode
             // 
-            this.miDeleteNode.Image = global::EducationHelper.Properties.Resources.RemoveIcon;
+            this.miDeleteNode.Image = global::NoteManager.Properties.Resources.RemoveIcon;
             this.miDeleteNode.Name = "miDeleteNode";
             this.miDeleteNode.Size = new System.Drawing.Size(163, 22);
             this.miDeleteNode.Text = "Удалить";
@@ -131,14 +131,14 @@
             this.tsBtnAddNode.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsAddFolder,
             this.tsAddNote});
-            this.tsBtnAddNode.Image = global::EducationHelper.Properties.Resources.AddIcon;
+            this.tsBtnAddNode.Image = global::NoteManager.Properties.Resources.AddIcon;
             this.tsBtnAddNode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnAddNode.Name = "tsBtnAddNode";
             this.tsBtnAddNode.Size = new System.Drawing.Size(29, 22);
             // 
             // tsAddFolder
             // 
-            this.tsAddFolder.Image = global::EducationHelper.Properties.Resources.FolderIcon;
+            this.tsAddFolder.Image = global::NoteManager.Properties.Resources.FolderIcon;
             this.tsAddFolder.Name = "tsAddFolder";
             this.tsAddFolder.Size = new System.Drawing.Size(172, 22);
             this.tsAddFolder.Text = "Добавить папку";
@@ -146,7 +146,7 @@
             // 
             // tsAddNote
             // 
-            this.tsAddNote.Image = global::EducationHelper.Properties.Resources.NoteIcon;
+            this.tsAddNote.Image = global::NoteManager.Properties.Resources.NoteIcon;
             this.tsAddNote.Name = "tsAddNote";
             this.tsAddNote.Size = new System.Drawing.Size(172, 22);
             this.tsAddNote.Text = "Добавить заметку";
@@ -155,7 +155,7 @@
             // tsBtnRemoveNode
             // 
             this.tsBtnRemoveNode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsBtnRemoveNode.Image = global::EducationHelper.Properties.Resources.RemoveIcon;
+            this.tsBtnRemoveNode.Image = global::NoteManager.Properties.Resources.RemoveIcon;
             this.tsBtnRemoveNode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnRemoveNode.Name = "tsBtnRemoveNode";
             this.tsBtnRemoveNode.Size = new System.Drawing.Size(23, 22);

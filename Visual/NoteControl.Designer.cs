@@ -1,4 +1,4 @@
-﻿namespace EducationHelper.Visual
+﻿namespace NoteManager.Visual
 {
     partial class NoteControl
     {

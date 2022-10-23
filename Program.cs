@@ -1,4 +1,4 @@
-namespace EducationHelper
+namespace NoteManager
 {
     internal static class Program
     {

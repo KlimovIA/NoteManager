@@ -1,4 +1,4 @@
-﻿namespace EducationHelper.Visual
+﻿namespace NoteManager.Visual
 {
     partial class DataSourceForm
     {
@@ -64,21 +64,21 @@
             this.tsBtnAddNode.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsAddFolder,
             this.tsAddNote});
-            this.tsBtnAddNode.Image = global::EducationHelper.Properties.Resources.AddIcon;
+            this.tsBtnAddNode.Image = global::NoteManager.Properties.Resources.AddIcon;
             this.tsBtnAddNode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnAddNode.Name = "tsBtnAddNode";
             this.tsBtnAddNode.Size = new System.Drawing.Size(29, 22);
             // 
             // tsAddFolder
             // 
-            this.tsAddFolder.Image = global::EducationHelper.Properties.Resources.YoutubeIcon;
+            this.tsAddFolder.Image = global::NoteManager.Properties.Resources.YoutubeIcon;
             this.tsAddFolder.Name = "tsAddFolder";
             this.tsAddFolder.Size = new System.Drawing.Size(261, 22);
             this.tsAddFolder.Text = "Добавить ссылку на youtube";
             // 
             // tsAddNote
             // 
-            this.tsAddNote.Image = global::EducationHelper.Properties.Resources.pdfIcon;
+            this.tsAddNote.Image = global::NoteManager.Properties.Resources.pdfIcon;
             this.tsAddNote.Name = "tsAddNote";
             this.tsAddNote.Size = new System.Drawing.Size(261, 22);
             this.tsAddNote.Text = "Добавить источник данных из pdf";
@@ -86,7 +86,7 @@
             // tsBtnRemoveNode
             // 
             this.tsBtnRemoveNode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsBtnRemoveNode.Image = global::EducationHelper.Properties.Resources.RemoveIcon;
+            this.tsBtnRemoveNode.Image = global::NoteManager.Properties.Resources.RemoveIcon;
             this.tsBtnRemoveNode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnRemoveNode.Name = "tsBtnRemoveNode";
             this.tsBtnRemoveNode.Size = new System.Drawing.Size(23, 22);

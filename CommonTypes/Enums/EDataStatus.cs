@@ -1,4 +1,4 @@
-﻿namespace EducationHelper.CommonTypes.Enums
+﻿namespace NoteManager.CommonTypes.Enums
 {
     /// <summary>
     /// Статус данных.

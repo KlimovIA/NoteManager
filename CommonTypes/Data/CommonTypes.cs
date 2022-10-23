@@ -1,5 +1,5 @@
 ﻿
-namespace EducationHelper.CommonTypes.Data
+namespace NoteManager.CommonTypes.Data
 {
     public static class CommonTypes
     {

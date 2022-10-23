@@ -1,6 +1,6 @@
-﻿using EducationHelper.CommonTypes.Enums;
+﻿using NoteManager.CommonTypes.Enums;
 
-namespace EducationHelper.CommonTypes.Data
+namespace NoteManager.CommonTypes.Data
 {
     public class DataSource
     {

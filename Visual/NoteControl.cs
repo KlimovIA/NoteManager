@@ -1,4 +1,4 @@
-﻿using EducationHelper.CommonTypes.Data;
+﻿using NoteManager.CommonTypes.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EducationHelper.Visual
+namespace NoteManager.Visual
 {
     public partial class NoteControl : UserControl
     {

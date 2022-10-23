@@ -1,12 +1,12 @@
-using EducationHelper.CommonTypes.Data;
-using EducationHelper.CommonTypes.Enums;
-using EducationHelper.Database;
-using EducationHelper.Properties;
-using EducationHelper.Visual;
+using NoteManager.CommonTypes.Data;
+using NoteManager.CommonTypes.Enums;
+using NoteManager.Database;
+using NoteManager.Properties;
+using NoteManager.Visual;
 using System.Linq;
 
 
-namespace EducationHelper
+namespace NoteManager
 {
     public partial class MainForm : Form
     {

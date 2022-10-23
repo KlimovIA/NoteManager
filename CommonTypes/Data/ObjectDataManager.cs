@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EducationHelper.CommonTypes.Data
+namespace NoteManager.CommonTypes.Data
 {
     internal static class ObjectDataManager
     {
