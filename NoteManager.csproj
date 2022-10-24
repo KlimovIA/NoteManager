@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <None Remove="CommonTypes\Data\ItemIDManager.cs~RF712a27.TMP" />
+    <None Remove="Resources\Image1.png" />
   </ItemGroup>
 
   <ItemGroup>

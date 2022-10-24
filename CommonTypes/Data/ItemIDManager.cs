@@ -7,7 +7,7 @@
         /// <summary>
         /// Выдаёт объекту свободный иденнтификационный номер.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Идентификационный номер для узла</returns>
         public static int GetNewItemID()
         {  
             // Ищем свободный ID
@@ -22,7 +22,16 @@
             return -1; // Сюда не упадёт, но компилятор ругается, если этой строчки не будет.
         }
 
+        /// <summary>
+        /// Удаляет идентификатор из общего списка идентификаторов.
+        /// </summary>
+        /// <param name="itemID"></param>
         public static void RemoveItemID(int itemID) => _itemIDList?.RemoveAt(_itemIDList.IndexOf(itemID));
+        
+        /// <summary>
+        /// Добавляет идентификатор в общий список идентификаторов.
+        /// </summary>
+        /// <param name="itemID"></param>
         public static void AddItemID(int itemID) => _itemIDList?.Add(itemID);
     }
 }
