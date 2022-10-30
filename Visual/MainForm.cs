@@ -370,5 +370,11 @@ namespace NoteManager
         /// Сделано для ограничения взаимодействий с корневым узлом (запрет на удаление и, возможно, что-то еще).
         /// </summary>
         private bool IsRootNode => tvObjectTree.SelectedNode == tvObjectTree.Nodes[0];
+        
+        private void tsBtnAddNode_DropDownOpened(object sender, EventArgs e)
+        {
+            tsAddNote.Enabled = ((ObjectData)tvObjectTree.SelectedNode?.Tag).ObjectType != ObjectType.NoteNode;
+            tsAddFolder.Enabled = ((ObjectData)tvObjectTree.SelectedNode?.Tag).ObjectType != ObjectType.NoteNode;
+        }
     }
 }

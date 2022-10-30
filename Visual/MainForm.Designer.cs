@@ -46,6 +46,7 @@
             this.pnlApplyChanges = new System.Windows.Forms.Panel();
             this.lbActionStatus = new System.Windows.Forms.Label();
             this.btnApplyChanges = new System.Windows.Forms.Button();
+            this.splitter1 = new System.Windows.Forms.Splitter();
             this.pnlToolStripContainer = new System.Windows.Forms.Panel();
             this.pnlObjectTreeContainer.SuspendLayout();
             this.msTreeView.SuspendLayout();
@@ -77,7 +78,7 @@
             this.tvObjectTree.TabIndex = 0;
             this.tvObjectTree.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.tvObjectTree_AfterLabelEdit);
             this.tvObjectTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvObjectTree_AfterSelect);
-            this.tvObjectTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tvObjectTree_KeyDown);           
+            this.tvObjectTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tvObjectTree_KeyDown);
             this.tvObjectTree.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tvObjectTree_MouseDown);
             // 
             // msTreeView
@@ -135,6 +136,7 @@
             this.tsBtnAddNode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnAddNode.Name = "tsBtnAddNode";
             this.tsBtnAddNode.Size = new System.Drawing.Size(29, 22);
+            this.tsBtnAddNode.DropDownOpened += new System.EventHandler(this.tsBtnAddNode_DropDownOpened);
             // 
             // tsAddFolder
             // 
@@ -178,13 +180,14 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ncNote.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ncNote.Location = new System.Drawing.Point(6, 6);
+            this.ncNote.Location = new System.Drawing.Point(3, 3);
             this.ncNote.Name = "ncNote";
-            this.ncNote.Size = new System.Drawing.Size(610, 480);
+            this.ncNote.Size = new System.Drawing.Size(610, 485);
             this.ncNote.TabIndex = 1;
             // 
             // pnlApplyChanges
             // 
+            this.pnlApplyChanges.BackColor = System.Drawing.SystemColors.Control;
             this.pnlApplyChanges.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlApplyChanges.Controls.Add(this.lbActionStatus);
             this.pnlApplyChanges.Controls.Add(this.btnApplyChanges);
@@ -213,6 +216,15 @@
             this.btnApplyChanges.UseVisualStyleBackColor = true;
             this.btnApplyChanges.Click += new System.EventHandler(this.btnApplyChanges_Click);
             // 
+            // splitter1
+            // 
+            this.splitter1.Location = new System.Drawing.Point(224, 27);
+            this.splitter1.MinExtra = 10;
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 522);
+            this.splitter1.TabIndex = 2;
+            this.splitter1.TabStop = false;
+            // 
             // pnlToolStripContainer
             // 
             this.pnlToolStripContainer.Controls.Add(this.tsFunctions);
@@ -227,6 +239,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(844, 549);
+            this.Controls.Add(this.splitter1);
             this.Controls.Add(this.pnlMainContainer);
             this.Controls.Add(this.pnlObjectTreeContainer);
             this.Controls.Add(this.pnlToolStripContainer);
@@ -271,5 +284,6 @@
         private Label lbActionStatus;
         private Panel pnlToolStripContainer;
         private Visual.NoteControl ncNote;
+        private Splitter splitter1;
     }
 }

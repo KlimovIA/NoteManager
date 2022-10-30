@@ -40,5 +40,32 @@ namespace NoteManager.Visual
                 lblDataSource.Text = dataSourceForm.DataSource?.SourceName ?? "Источник данных отсутствует";
             }
         }
+
+        private void SaveText(object sender, EventArgs e)
+        {
+            // Сохраняем содержимое richEdit в память объекта данных
+            _objectData?.Note?.Clear();
+            _objectData?.Note?.Append(redtNote.Text);
+        }
+
+        private void OpenTextFile(object sender, EventArgs e)
+        {
+            // Открываем текстовый файл и кидаем его содержимое в richEdit
+            using (OpenFileDialog OPD = new OpenFileDialog())
+            {
+                OPD.Filter = "Текстовый файл (*.txt)|*.txt";
+                OPD.RestoreDirectory = true;
+
+                if (OPD.ShowDialog() == DialogResult.OK)
+                {
+                    using (StreamReader reader = new StreamReader(OPD.FileName, Encoding.UTF8))
+                    {
+                        // Предварительно чистим поле ввода
+                        redtNote.Clear();
+                        redtNote.Text = reader.ReadToEnd();
+                    }    
+                }
+            }
+        }
     }
 }
