@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace NoteManager.Visual
 {
@@ -32,7 +33,7 @@ namespace NoteManager.Visual
             lblDataSource.Text = _objectData?.DataSource?.SourceName ?? "Источник данных отсутсвует";
         }
 
-        private void lblChooseDataSource_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void ChooseDataSource(object sender, LinkLabelLinkClickedEventArgs e)
         {
             DataSourceForm dataSourceForm = new DataSourceForm();
             if (dataSourceForm.ShowDialog() == DialogResult.OK)
@@ -66,6 +67,46 @@ namespace NoteManager.Visual
                     }    
                 }
             }
+        }
+
+        private void NoteControlLoad(object sender, EventArgs e)
+        {
+            // Здесь формируем набор в комбобоксе шрифтов и размеров шрифтов
+            InitFonts();
+            InitFontSizes();
+        }
+
+        /// <summary>
+        /// Заполняет комбобокс списком шрифтов
+        /// </summary>
+        private void InitFonts()
+        {
+            foreach (FontFamily item in FontFamily.Families)
+                cbbFontNames.Items.Add(item.Name);
+            cbbFontNames.SelectedItem = cbbFontNames.Items[0];
+        }
+
+        /// <summary>
+        /// Заполняет комбобокс размеров шрифта
+        /// </summary>
+        private void InitFontSizes()
+        {
+            // Взял размеры шрифтов из Word'a
+            int[] fontSizes = new int[] { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
+
+            foreach (var fontSize in fontSizes)
+                cbbFontSizes.Items.Add(fontSize);
+            cbbFontSizes.SelectedItem = cbbFontSizes.Items[0];
+        }
+
+        private void FontSizeUp(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FontSizeDown(object sender, EventArgs e)
+        {
+
         }
     }
 }
