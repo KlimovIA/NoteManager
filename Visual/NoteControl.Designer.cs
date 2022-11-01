@@ -47,7 +47,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnBoldFont = new System.Windows.Forms.ToolStripButton();
             this.btnItalicFont = new System.Windows.Forms.ToolStripButton();
-            this.btnUnderlinedFont = new System.Windows.Forms.ToolStripButton();
+            this.btnUnderlineFont = new System.Windows.Forms.ToolStripButton();
+            this.btnStrikeoutFont = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnLeftTextAlign = new System.Windows.Forms.ToolStripButton();
             this.btnCenterTextAlign = new System.Windows.Forms.ToolStripButton();
@@ -66,6 +67,7 @@
             this.redtNote.Size = new System.Drawing.Size(526, 384);
             this.redtNote.TabIndex = 0;
             this.redtNote.Text = "";
+            this.redtNote.SelectionChanged += new System.EventHandler(this.UpdateTextSettings);
             // 
             // lblDataSoruceDesc
             // 
@@ -162,16 +164,17 @@
             this.toolStripSeparator1,
             this.btnBoldFont,
             this.btnItalicFont,
-            this.btnUnderlinedFont,
+            this.btnUnderlineFont,
+            this.btnStrikeoutFont,
             this.toolStripSeparator2,
             this.btnLeftTextAlign,
             this.btnCenterTextAlign,
             this.btnRightTextAlign});
+            this.tsTextFunctions.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.tsTextFunctions.Location = new System.Drawing.Point(0, 25);
             this.tsTextFunctions.Name = "tsTextFunctions";
             this.tsTextFunctions.Size = new System.Drawing.Size(532, 25);
             this.tsTextFunctions.TabIndex = 6;
-            this.tsTextFunctions.Text = "toolStrip1";
             // 
             // cbbFontNames
             // 
@@ -210,30 +213,48 @@
             // 
             // btnBoldFont
             // 
+            this.btnBoldFont.CheckOnClick = true;
             this.btnBoldFont.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.btnBoldFont.Image = ((System.Drawing.Image)(resources.GetObject("btnBoldFont.Image")));
             this.btnBoldFont.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnBoldFont.Name = "btnBoldFont";
             this.btnBoldFont.Size = new System.Drawing.Size(23, 22);
-            this.btnBoldFont.Text = "toolStripButton2";
+            this.btnBoldFont.Text = "Полужирный текст";
+            this.btnBoldFont.Click += new System.EventHandler(this.SetBoldOnSelection);
             // 
             // btnItalicFont
             // 
+            this.btnItalicFont.CheckOnClick = true;
             this.btnItalicFont.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.btnItalicFont.Image = ((System.Drawing.Image)(resources.GetObject("btnItalicFont.Image")));
             this.btnItalicFont.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnItalicFont.Name = "btnItalicFont";
             this.btnItalicFont.Size = new System.Drawing.Size(23, 22);
-            this.btnItalicFont.Text = "toolStripButton3";
+            this.btnItalicFont.Text = "Курсивный текст";
+            this.btnItalicFont.Click += new System.EventHandler(this.SetItalicOnSelection);
             // 
-            // btnUnderlinedFont
+            // btnUnderlineFont
             // 
-            this.btnUnderlinedFont.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnUnderlinedFont.Image = ((System.Drawing.Image)(resources.GetObject("btnUnderlinedFont.Image")));
-            this.btnUnderlinedFont.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnUnderlinedFont.Name = "btnUnderlinedFont";
-            this.btnUnderlinedFont.Size = new System.Drawing.Size(23, 22);
-            this.btnUnderlinedFont.Text = "toolStripButton1";
+            this.btnUnderlineFont.CheckOnClick = true;
+            this.btnUnderlineFont.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnUnderlineFont.Image = ((System.Drawing.Image)(resources.GetObject("btnUnderlineFont.Image")));
+            this.btnUnderlineFont.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnUnderlineFont.Name = "btnUnderlineFont";
+            this.btnUnderlineFont.Size = new System.Drawing.Size(23, 22);
+            this.btnUnderlineFont.Text = "Подчёркнутый текст";
+            this.btnUnderlineFont.Click += new System.EventHandler(this.SetUnderlineOnSelection);
+            // 
+            // btnStrikeoutFont
+            // 
+            this.btnStrikeoutFont.CheckOnClick = true;
+            this.btnStrikeoutFont.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnStrikeoutFont.Image = ((System.Drawing.Image)(resources.GetObject("btnStrikeoutFont.Image")));
+            this.btnStrikeoutFont.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnStrikeoutFont.Name = "btnStrikeoutFont";
+            this.btnStrikeoutFont.Size = new System.Drawing.Size(23, 22);
+            this.btnStrikeoutFont.Text = "Перечёркнутый текст";
+            this.btnStrikeoutFont.ToolTipText = "btn";
+            this.btnStrikeoutFont.Click += new System.EventHandler(this.SetStrikeoutOnSelection);
             // 
             // toolStripSeparator2
             // 
@@ -249,6 +270,7 @@
             this.btnLeftTextAlign.Name = "btnLeftTextAlign";
             this.btnLeftTextAlign.Size = new System.Drawing.Size(23, 22);
             this.btnLeftTextAlign.Text = "Выровнять по левому краю";
+            this.btnLeftTextAlign.Click += new System.EventHandler(this.SetLeftAlignmentOnSelection);
             // 
             // btnCenterTextAlign
             // 
@@ -259,6 +281,7 @@
             this.btnCenterTextAlign.Name = "btnCenterTextAlign";
             this.btnCenterTextAlign.Size = new System.Drawing.Size(23, 22);
             this.btnCenterTextAlign.Text = "Выровнять по центру";
+            this.btnCenterTextAlign.Click += new System.EventHandler(this.SetCenterAlignmentOnSelection);
             // 
             // btnRightTextAlign
             // 
@@ -269,6 +292,7 @@
             this.btnRightTextAlign.Name = "btnRightTextAlign";
             this.btnRightTextAlign.Size = new System.Drawing.Size(23, 22);
             this.btnRightTextAlign.Text = "Выровнять по правому краю";
+            this.btnRightTextAlign.Click += new System.EventHandler(this.SetRightAlignmentOnSelection);
             // 
             // NoteControl
             // 
@@ -316,7 +340,8 @@
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripButton btnBoldFont;
         private ToolStripButton btnItalicFont;
-        private ToolStripButton btnUnderlinedFont;
+        private ToolStripButton btnUnderlineFont;
         private ToolStripSeparator toolStripSeparator2;
+        private ToolStripButton btnStrikeoutFont;
     }
 }

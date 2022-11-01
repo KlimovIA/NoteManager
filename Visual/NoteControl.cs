@@ -33,6 +33,9 @@ namespace NoteManager.Visual
             lblDataSource.Text = _objectData?.DataSource?.SourceName ?? "Источник данных отсутсвует";
         }
 
+        /// <summary>
+        /// Выбор источника данных из базы данных.
+        /// </summary>
         private void ChooseDataSource(object sender, LinkLabelLinkClickedEventArgs e)
         {
             DataSourceForm dataSourceForm = new DataSourceForm();
@@ -77,7 +80,7 @@ namespace NoteManager.Visual
         }
 
         /// <summary>
-        /// Заполняет комбобокс списком шрифтов
+        /// Заполняет комбобокс списком шрифтов.
         /// </summary>
         private void InitFonts()
         {
@@ -87,7 +90,7 @@ namespace NoteManager.Visual
         }
 
         /// <summary>
-        /// Заполняет комбобокс размеров шрифта
+        /// Заполняет комбобокс размеров шрифта.
         /// </summary>
         private void InitFontSizes()
         {
@@ -99,14 +102,109 @@ namespace NoteManager.Visual
             cbbFontSizes.SelectedItem = cbbFontSizes.Items[0];
         }
 
+        /// <summary>
+        /// Увеличение размера шрифта.
+        /// </summary>
         private void FontSizeUp(object sender, EventArgs e)
         {
-
+            redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
+                                              redtNote.SelectionFont.Size + 1,
+                                              redtNote.SelectionFont.Style);
+            UpdateTextSettings(null, new EventArgs());
         }
 
+        /// <summary>
+        /// Уменьшение размера шрифта.
+        /// </summary>
         private void FontSizeDown(object sender, EventArgs e)
         {
+            redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
+                                              redtNote.SelectionFont.Size - 1, 
+                                              redtNote.SelectionFont.Style);
+            UpdateTextSettings(null, new EventArgs());
+        }
 
+        /// <summary>
+        /// Устанавливает полужирный шрифт на выделенном тексте.
+        /// </summary>
+        private void SetBoldOnSelection(object sender, EventArgs e)
+        {
+            redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
+                                              redtNote.SelectionFont.Size,
+                                              redtNote.SelectionFont.Style ^ FontStyle.Bold);
+            UpdateTextSettings(null, new EventArgs());
+        }
+
+        /// <summary>
+        /// Устанавливает курсив на выделенном тексте. 
+        /// </summary>
+        private void SetItalicOnSelection(object sender, EventArgs e)
+        {
+            redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
+                                              redtNote.SelectionFont.Size,
+                                              redtNote.SelectionFont.Style ^ FontStyle.Italic);
+            UpdateTextSettings(null, new EventArgs());
+        }
+
+        /// <summary>
+        /// Устанавливает подчеркивание на выделенном тексте.
+        /// </summary>
+        private void SetUnderlineOnSelection(object sender, EventArgs e)
+        {
+            redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
+                                              redtNote.SelectionFont.Size,
+                                              redtNote.SelectionFont.Style ^ FontStyle.Underline);
+            UpdateTextSettings(null, new EventArgs());
+        }
+
+        /// <summary>
+        /// Устанавливает перечеркивание на выделенном тексте.
+        /// </summary>     
+        private void SetStrikeoutOnSelection(object sender, EventArgs e)
+        {
+            redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
+                                              redtNote.SelectionFont.Size,
+                                              redtNote.SelectionFont.Style ^ FontStyle.Strikeout);
+            UpdateTextSettings(null, new EventArgs());
+        }
+
+        private void UpdateTextSettings(object sender, EventArgs e)
+        {
+            // Обновляем состояние панели редактора текста
+
+            // Проверяем выбранные режимы шрифтов
+            btnBoldFont.Checked = redtNote.SelectionFont.Bold;
+            btnItalicFont.Checked = redtNote.SelectionFont.Italic;
+            btnUnderlineFont.Checked = redtNote.SelectionFont.Underline;
+            btnStrikeoutFont.Checked = redtNote.SelectionFont.Strikeout;
+
+            // Проверяем выбранный режим выравнивания текста
+            btnLeftTextAlign.Checked = redtNote.SelectionAlignment == HorizontalAlignment.Left;
+            btnCenterTextAlign.Checked = redtNote.SelectionAlignment == HorizontalAlignment.Center;
+            btnRightTextAlign.Checked = redtNote.SelectionAlignment == HorizontalAlignment.Right;
+             
+
+            // Проверяем выбранный шрифт и размер шрифта
+            cbbFontNames.SelectedItem = redtNote.SelectionFont.Name;
+            cbbFontSizes.Text = redtNote.SelectionFont.Size.ToString();
+        }
+
+        private void SetLeftAlignmentOnSelection(object sender, EventArgs e)
+        {
+            redtNote.SelectionAlignment = HorizontalAlignment.Left;
+            UpdateTextSettings(null, new EventArgs());
+        }
+
+        private void SetCenterAlignmentOnSelection(object sender, EventArgs e)
+        {
+            redtNote.SelectionAlignment = HorizontalAlignment.Center;
+            UpdateTextSettings(null, new EventArgs());
+        }
+
+        private void SetRightAlignmentOnSelection(object sender, EventArgs e)
+        {
+            redtNote.SelectionAlignment = HorizontalAlignment.Right;
+            UpdateTextSettings(null, new EventArgs());
         }
     }
 }
