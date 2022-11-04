@@ -30,8 +30,9 @@ namespace NoteManager
         /// </summary>
         private void InitMainRootNode()
         {
+            ObjectType nodeType = ObjectType.RootNode;
             // Его не нужно добавлять в общий набор объектов. Он будет всегдда неизменным.
-            TreeNode node = tvObjectTree.Nodes.Add("Корневой узел");
+            TreeNode node = tvObjectTree.Nodes.Add(CommonTypes.Data.CommonTypes.NodeTypeDesc[(byte)nodeType]);
             node.SelectedImageIndex = (byte)ObjectType.RootNode;
             node.StateImageIndex = (byte)ObjectType.RootNode;
             node.ImageIndex = (byte)ObjectType.RootNode;
@@ -185,13 +186,13 @@ namespace NoteManager
             // Для регулирования вложенностей в дереве
             if (tvObjectTree.SelectedNode != null)
             {
-                node = tvObjectTree.SelectedNode.Nodes.Add(CommonTypes.Data.CommonTypes.NoteTypeDesc[(byte)nodeType]);
+                node = tvObjectTree.SelectedNode.Nodes.Add(CommonTypes.Data.CommonTypes.NodeTypeDesc[(byte)nodeType]);
             }
             else
             {
                 //  Если узел не выбран, то цепляемся к корневому узлу
                 TreeNode root = tvObjectTree.Nodes[0];
-                node = root.Nodes.Add(CommonTypes.Data.CommonTypes.NoteTypeDesc[(byte)nodeType]);
+                node = root.Nodes.Add(CommonTypes.Data.CommonTypes.NodeTypeDesc[(byte)nodeType]);
             }
                
 

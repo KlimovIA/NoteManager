@@ -29,8 +29,8 @@ namespace NoteManager.Visual
         private void UpdateNote()
         {
             redtNote.Clear();
-            redtNote.Text = _objectData?.Note?.ToString() ?? "";
-            lblDataSource.Text = _objectData?.DataSource?.SourceName ?? "Источник данных отсутсвует";
+            redtNote.Text = _objectData?.Note?.ToString() ?? string.Empty;
+            lblDataSource.Text = _objectData?.DataSource?.SourceName ?? Constants.NoDataSource;
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace NoteManager.Visual
             DataSourceForm dataSourceForm = new DataSourceForm();
             if (dataSourceForm.ShowDialog() == DialogResult.OK)
             {
-                lblDataSource.Text = dataSourceForm.DataSource?.SourceName ?? "Источник данных отсутствует";
+                lblDataSource.Text = dataSourceForm.DataSource?.SourceName ?? Constants.NoDataSource;
             }
         }
 
@@ -57,7 +57,7 @@ namespace NoteManager.Visual
             // Открываем текстовый файл и кидаем его содержимое в richEdit
             using (OpenFileDialog OPD = new OpenFileDialog())
             {
-                OPD.Filter = "Текстовый файл (*.txt)|*.txt";
+                OPD.Filter = Constants.TxtFileFilterDesc;
                 OPD.RestoreDirectory = true;
 
                 if (OPD.ShowDialog() == DialogResult.OK)

@@ -2,7 +2,7 @@
 using NoteManager.CommonTypes.Enums;
 using Microsoft.Data.Sqlite;
 using System.Text;
-using System.Xml.Linq;
+using System.Data;
 
 namespace NoteManager.Database
 {
@@ -30,12 +30,14 @@ namespace NoteManager.Database
 
         public delegate void DatabaseActionMessageHandler(string Message);
         public event DatabaseActionMessageHandler DatabaseActionEvent;
+
+        private readonly string _dataSourceConnectionString = "Data Source = Database.db3";
         public DatabaseManager()
         {
             // Если у нас не будет существовать файла БД, то создаём и набиваем его таблицами
             if (!File.Exists($"{Application.StartupPath}\\Database.db3"))
             {
-                using (SqliteConnection _connection = new SqliteConnection("Data Source = Database.db3"))
+                using (SqliteConnection _connection = new SqliteConnection(_dataSourceConnectionString))
                 {
                     _connection.Open();
                     using (SqliteCommand command = new SqliteCommand("", _connection))
@@ -69,7 +71,7 @@ namespace NoteManager.Database
         public void LoadObjectTreeFromDB()
         {
             // Заполним статический список, а в основной форме будем распаковывать
-            using (SqliteConnection _connection = new SqliteConnection("Data Source = Database.db3"))
+            using (SqliteConnection _connection = new SqliteConnection(_dataSourceConnectionString))
             {
                 _connection.Open();
 
@@ -160,12 +162,11 @@ namespace NoteManager.Database
             }
             catch (Exception)
             {
-                //throw new Exception("Ошибка выполнения запроса к базе данных!");
-                MessageBox.Show("Ошибка выполнения запроса к базе данных!", "Ошибка выполнения!");
-                RaiseDatabaseActionEvent("Модификация данных не выполнена.");
+                MessageBox.Show(Constants.DatabaseRequestError, Constants.ExecutionError);
+                RaiseDatabaseActionEvent(Constants.DataModificationNotDone);
                 return false;
             }
-            RaiseDatabaseActionEvent("Модификация данных в базе данных прошла успешно.");
+            RaiseDatabaseActionEvent(Constants.DataModificationSuccess);
             return true;
         }
 
@@ -182,9 +183,9 @@ namespace NoteManager.Database
             string objectName = objData.ObjectName;
             int objectType = (int)objData.ObjectType;
             int sourceID = objData.SourceID;
-            string noteText = objData.Note?.ToString()?? "";
+            string noteText = objData.Note?.ToString()?? string.Empty;
 
-            using (SqliteConnection _connection = new SqliteConnection("Data Source = Database.db3"))
+            using (SqliteConnection _connection = new SqliteConnection(_dataSourceConnectionString))
             {
                 _connection.Open();
 
@@ -216,7 +217,7 @@ namespace NoteManager.Database
         private void DeleteNodeFromDB(ObjectData objData)
         {
             int objectID = objData.ObjectID;
-            using (SqliteConnection _connection = new SqliteConnection("Data Source = Database.db3"))
+            using (SqliteConnection _connection = new SqliteConnection(_dataSourceConnectionString))
             {
                 _connection.Open();
 
@@ -241,9 +242,9 @@ namespace NoteManager.Database
             int parentID = objData.ParentID;
             int sourceID = objData.SourceID;
             string objectName = objData.ObjectName;
-            string noteText = objData.Note?.ToString() ?? "";
+            string noteText = objData.Note?.ToString() ?? string.Empty;
 
-            using (SqliteConnection _connection = new SqliteConnection("Data Source = Database.db3"))
+            using (SqliteConnection _connection = new SqliteConnection(_dataSourceConnectionString))
             {
                 _connection.Open();
 
