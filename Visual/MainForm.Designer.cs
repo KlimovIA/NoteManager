@@ -45,7 +45,8 @@
             this.ncNote = new NoteManager.Visual.NoteControl();
             this.pnlApplyChanges = new System.Windows.Forms.Panel();
             this.lbActionStatus = new System.Windows.Forms.Label();
-            this.btnApplyChanges = new System.Windows.Forms.Button();
+            this.btnSaveToDB = new System.Windows.Forms.Button();
+            this.splitter1 = new System.Windows.Forms.Splitter();
             this.pnlToolStripContainer = new System.Windows.Forms.Panel();
             this.pnlObjectTreeContainer.SuspendLayout();
             this.msTreeView.SuspendLayout();
@@ -59,9 +60,10 @@
             // 
             this.pnlObjectTreeContainer.Controls.Add(this.tvObjectTree);
             this.pnlObjectTreeContainer.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnlObjectTreeContainer.Location = new System.Drawing.Point(0, 27);
+            this.pnlObjectTreeContainer.Location = new System.Drawing.Point(0, 36);
+            this.pnlObjectTreeContainer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pnlObjectTreeContainer.Name = "pnlObjectTreeContainer";
-            this.pnlObjectTreeContainer.Size = new System.Drawing.Size(224, 522);
+            this.pnlObjectTreeContainer.Size = new System.Drawing.Size(256, 696);
             this.pnlObjectTreeContainer.TabIndex = 1;
             // 
             // tvObjectTree
@@ -72,29 +74,31 @@
             this.tvObjectTree.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvObjectTree.LabelEdit = true;
             this.tvObjectTree.Location = new System.Drawing.Point(0, 0);
+            this.tvObjectTree.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tvObjectTree.Name = "tvObjectTree";
-            this.tvObjectTree.Size = new System.Drawing.Size(224, 522);
+            this.tvObjectTree.Size = new System.Drawing.Size(256, 696);
             this.tvObjectTree.TabIndex = 0;
             this.tvObjectTree.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.tvObjectTree_AfterLabelEdit);
             this.tvObjectTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvObjectTree_AfterSelect);
-            this.tvObjectTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tvObjectTree_KeyDown);           
+            this.tvObjectTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tvObjectTree_KeyDown);
             this.tvObjectTree.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tvObjectTree_MouseDown);
             // 
             // msTreeView
             // 
+            this.msTreeView.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.msTreeView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miAddFolder,
             this.miAddNote,
             this.miDeleteNode});
             this.msTreeView.Name = "contextMenuStrip1";
-            this.msTreeView.Size = new System.Drawing.Size(164, 70);
+            this.msTreeView.Size = new System.Drawing.Size(196, 82);
             this.msTreeView.Opening += new System.ComponentModel.CancelEventHandler(this.msTreeView_Opening);
             // 
             // miAddFolder
             // 
             this.miAddFolder.Image = global::NoteManager.Properties.Resources.FolderIcon;
             this.miAddFolder.Name = "miAddFolder";
-            this.miAddFolder.Size = new System.Drawing.Size(163, 22);
+            this.miAddFolder.Size = new System.Drawing.Size(195, 26);
             this.miAddFolder.Text = "Создать папку";
             this.miAddFolder.Click += new System.EventHandler(this.tsAddFolder_Click);
             // 
@@ -102,7 +106,7 @@
             // 
             this.miAddNote.Image = global::NoteManager.Properties.Resources.NoteIcon;
             this.miAddNote.Name = "miAddNote";
-            this.miAddNote.Size = new System.Drawing.Size(163, 22);
+            this.miAddNote.Size = new System.Drawing.Size(195, 26);
             this.miAddNote.Text = "Создать заметку";
             this.miAddNote.Click += new System.EventHandler(this.tsAddNote_Click);
             // 
@@ -110,19 +114,20 @@
             // 
             this.miDeleteNode.Image = global::NoteManager.Properties.Resources.RemoveIcon;
             this.miDeleteNode.Name = "miDeleteNode";
-            this.miDeleteNode.Size = new System.Drawing.Size(163, 22);
+            this.miDeleteNode.Size = new System.Drawing.Size(195, 26);
             this.miDeleteNode.Text = "Удалить";
             this.miDeleteNode.Click += new System.EventHandler(this.tsBtnRemoveNode_Click);
             // 
             // tsFunctions
             // 
+            this.tsFunctions.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.tsFunctions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsBtnAddNode,
             this.tsBtnRemoveNode});
             this.tsFunctions.Location = new System.Drawing.Point(0, 0);
             this.tsFunctions.Margin = new System.Windows.Forms.Padding(1);
             this.tsFunctions.Name = "tsFunctions";
-            this.tsFunctions.Size = new System.Drawing.Size(844, 25);
+            this.tsFunctions.Size = new System.Drawing.Size(965, 27);
             this.tsFunctions.TabIndex = 1;
             // 
             // tsBtnAddNode
@@ -134,13 +139,14 @@
             this.tsBtnAddNode.Image = global::NoteManager.Properties.Resources.AddIcon;
             this.tsBtnAddNode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnAddNode.Name = "tsBtnAddNode";
-            this.tsBtnAddNode.Size = new System.Drawing.Size(29, 22);
+            this.tsBtnAddNode.Size = new System.Drawing.Size(34, 24);
+            this.tsBtnAddNode.DropDownOpened += new System.EventHandler(this.tsBtnAddNode_DropDownOpened);
             // 
             // tsAddFolder
             // 
             this.tsAddFolder.Image = global::NoteManager.Properties.Resources.FolderIcon;
             this.tsAddFolder.Name = "tsAddFolder";
-            this.tsAddFolder.Size = new System.Drawing.Size(172, 22);
+            this.tsAddFolder.Size = new System.Drawing.Size(217, 26);
             this.tsAddFolder.Text = "Добавить папку";
             this.tsAddFolder.Click += new System.EventHandler(this.tsAddFolder_Click);
             // 
@@ -148,7 +154,7 @@
             // 
             this.tsAddNote.Image = global::NoteManager.Properties.Resources.NoteIcon;
             this.tsAddNote.Name = "tsAddNote";
-            this.tsAddNote.Size = new System.Drawing.Size(172, 22);
+            this.tsAddNote.Size = new System.Drawing.Size(217, 26);
             this.tsAddNote.Text = "Добавить заметку";
             this.tsAddNote.Click += new System.EventHandler(this.tsAddNote_Click);
             // 
@@ -158,7 +164,7 @@
             this.tsBtnRemoveNode.Image = global::NoteManager.Properties.Resources.RemoveIcon;
             this.tsBtnRemoveNode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnRemoveNode.Name = "tsBtnRemoveNode";
-            this.tsBtnRemoveNode.Size = new System.Drawing.Size(23, 22);
+            this.tsBtnRemoveNode.Size = new System.Drawing.Size(29, 24);
             this.tsBtnRemoveNode.Text = "Удалить выбраный узел";
             this.tsBtnRemoveNode.Click += new System.EventHandler(this.tsBtnRemoveNode_Click);
             // 
@@ -167,9 +173,10 @@
             this.pnlMainContainer.Controls.Add(this.ncNote);
             this.pnlMainContainer.Controls.Add(this.pnlApplyChanges);
             this.pnlMainContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMainContainer.Location = new System.Drawing.Point(224, 27);
+            this.pnlMainContainer.Location = new System.Drawing.Point(256, 36);
+            this.pnlMainContainer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pnlMainContainer.Name = "pnlMainContainer";
-            this.pnlMainContainer.Size = new System.Drawing.Size(620, 522);
+            this.pnlMainContainer.Size = new System.Drawing.Size(709, 696);
             this.pnlMainContainer.TabIndex = 2;
             // 
             // ncNote
@@ -178,62 +185,79 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ncNote.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ncNote.Location = new System.Drawing.Point(6, 6);
+            this.ncNote.Location = new System.Drawing.Point(3, 4);
+            this.ncNote.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.ncNote.Name = "ncNote";
-            this.ncNote.Size = new System.Drawing.Size(610, 480);
+            this.ncNote.Size = new System.Drawing.Size(697, 647);
             this.ncNote.TabIndex = 1;
             // 
             // pnlApplyChanges
             // 
+            this.pnlApplyChanges.BackColor = System.Drawing.SystemColors.Control;
             this.pnlApplyChanges.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlApplyChanges.Controls.Add(this.lbActionStatus);
-            this.pnlApplyChanges.Controls.Add(this.btnApplyChanges);
+            this.pnlApplyChanges.Controls.Add(this.btnSaveToDB);
             this.pnlApplyChanges.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlApplyChanges.Location = new System.Drawing.Point(0, 492);
+            this.pnlApplyChanges.Location = new System.Drawing.Point(0, 657);
+            this.pnlApplyChanges.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pnlApplyChanges.Name = "pnlApplyChanges";
-            this.pnlApplyChanges.Size = new System.Drawing.Size(620, 30);
+            this.pnlApplyChanges.Size = new System.Drawing.Size(709, 39);
             this.pnlApplyChanges.TabIndex = 0;
             // 
             // lbActionStatus
             // 
             this.lbActionStatus.AutoSize = true;
-            this.lbActionStatus.Location = new System.Drawing.Point(5, 6);
+            this.lbActionStatus.Location = new System.Drawing.Point(6, 8);
             this.lbActionStatus.Name = "lbActionStatus";
-            this.lbActionStatus.Size = new System.Drawing.Size(0, 15);
+            this.lbActionStatus.Size = new System.Drawing.Size(0, 20);
             this.lbActionStatus.TabIndex = 1;
             // 
-            // btnApplyChanges
+            // btnSaveToDB
             // 
-            this.btnApplyChanges.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnApplyChanges.Location = new System.Drawing.Point(533, 2);
-            this.btnApplyChanges.Name = "btnApplyChanges";
-            this.btnApplyChanges.Size = new System.Drawing.Size(86, 23);
-            this.btnApplyChanges.TabIndex = 0;
-            this.btnApplyChanges.Text = "Применить";
-            this.btnApplyChanges.UseVisualStyleBackColor = true;
-            this.btnApplyChanges.Click += new System.EventHandler(this.btnApplyChanges_Click);
+            this.btnSaveToDB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveToDB.Location = new System.Drawing.Point(577, 3);
+            this.btnSaveToDB.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnSaveToDB.Name = "btnSaveToDB";
+            this.btnSaveToDB.Size = new System.Drawing.Size(131, 31);
+            this.btnSaveToDB.TabIndex = 0;
+            this.btnSaveToDB.Text = "Сохранить в БД";
+            this.btnSaveToDB.UseVisualStyleBackColor = true;
+            this.btnSaveToDB.Click += new System.EventHandler(this.SaveToDataBase);
+            // 
+            // splitter1
+            // 
+            this.splitter1.Location = new System.Drawing.Point(256, 36);
+            this.splitter1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.splitter1.MinExtra = 10;
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 696);
+            this.splitter1.TabIndex = 2;
+            this.splitter1.TabStop = false;
             // 
             // pnlToolStripContainer
             // 
             this.pnlToolStripContainer.Controls.Add(this.tsFunctions);
             this.pnlToolStripContainer.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlToolStripContainer.Location = new System.Drawing.Point(0, 0);
+            this.pnlToolStripContainer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pnlToolStripContainer.Name = "pnlToolStripContainer";
-            this.pnlToolStripContainer.Size = new System.Drawing.Size(844, 27);
+            this.pnlToolStripContainer.Size = new System.Drawing.Size(965, 36);
             this.pnlToolStripContainer.TabIndex = 3;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(844, 549);
+            this.ClientSize = new System.Drawing.Size(965, 732);
+            this.Controls.Add(this.splitter1);
             this.Controls.Add(this.pnlMainContainer);
             this.Controls.Add(this.pnlObjectTreeContainer);
             this.Controls.Add(this.pnlToolStripContainer);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.KeyPreview = true;
-            this.MinimumSize = new System.Drawing.Size(860, 588);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MinimumSize = new System.Drawing.Size(980, 768);
             this.Name = "MainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Менеждер заметок";
@@ -267,9 +291,10 @@
         private ToolStripMenuItem miAddNote;
         private ToolStripMenuItem miDeleteNode;
         private Panel pnlApplyChanges;
-        private Button btnApplyChanges;
+        private Button btnSaveToDB;
         private Label lbActionStatus;
         private Panel pnlToolStripContainer;
         private Visual.NoteControl ncNote;
+        private Splitter splitter1;
     }
 }

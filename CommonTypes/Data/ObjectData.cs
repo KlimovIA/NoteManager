@@ -12,7 +12,7 @@ namespace NoteManager.CommonTypes.Data
         private readonly ObjectType _objectType;
         private int _dataSourceID;
         private DataSource? _dataSource;
-        private readonly StringBuilder? _noteText;
+        private MemoryStream? _noteText;
         private DataStatus _dataStatus;              
 
         /// <summary>
@@ -60,11 +60,12 @@ namespace NoteManager.CommonTypes.Data
         }
 
         /// <summary>
-        /// Текст заметки.
+        /// Текст заметки. Используем стрим, чтобы сохранять все шрифты в БД.
         /// </summary>
-        public StringBuilder? Note
+        public MemoryStream? Note
         {
             get => _noteText;
+            set => _noteText = value;
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace NoteManager.CommonTypes.Data
             set => _dataSource = value;
         }
 
-        public ObjectData(int objectID, int parentID, string objectName, ObjectType objectType, int sourceID, StringBuilder? note)
+        public ObjectData(int objectID, int parentID, string objectName, ObjectType objectType, int sourceID, MemoryStream? note)
         {
             _objectID = objectID;
             _parentID = parentID;

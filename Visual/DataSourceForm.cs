@@ -16,7 +16,7 @@ namespace NoteManager.Visual
         private DataSource _dataSource;
         public DataSourceForm()
         {
-            InitializeComponent();
+            InitializeComponent();          
         }
 
         public DataSource DataSource { get => _dataSource; }

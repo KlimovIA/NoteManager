@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NoteManager.CommonTypes.Data
+﻿namespace NoteManager.CommonTypes.Data
 {
     internal static class DataSourceManager
     {
-        private static List<DataSource> dataSources = new List<DataSource>();
+        private static readonly List<DataSource> dataSources = new List<DataSource>();
         
         /// <summary>
         /// Список объектов, хранящих информацию об источниках данных

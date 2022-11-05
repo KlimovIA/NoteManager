@@ -30,8 +30,9 @@ namespace NoteManager
         /// </summary>
         private void InitMainRootNode()
         {
+            ObjectType nodeType = ObjectType.RootNode;
             // Его не нужно добавлять в общий набор объектов. Он будет всегдда неизменным.
-            TreeNode node = tvObjectTree.Nodes.Add("Корневой узел");
+            TreeNode node = tvObjectTree.Nodes.Add(CommonTypes.Data.CommonTypes.NodeTypeDesc[(byte)nodeType]);
             node.SelectedImageIndex = (byte)ObjectType.RootNode;
             node.StateImageIndex = (byte)ObjectType.RootNode;
             node.ImageIndex = (byte)ObjectType.RootNode;
@@ -105,7 +106,7 @@ namespace NoteManager
         /// <param name="objectData">Объект данных</param>
         private void AddNode(ObjectData objectData)
         {
-            TreeNode node = null;
+            TreeNode? node = null;
             tvObjectTree.BeginUpdate();
 
             // Если объект не имеет родителя, то быстренько добавляем его в лист
@@ -150,7 +151,7 @@ namespace NoteManager
         /// <returns></returns>
         private TreeNode? FindParentNode(TreeNode node, int ParentID)
         {
-            TreeNode parentNode = null;
+            TreeNode? parentNode = null;
             // Если в узле не нашли нужное значение, идём в дочерние узлы
             if (((ObjectData)node.Tag).ObjectID != ParentID)
             {
@@ -185,13 +186,13 @@ namespace NoteManager
             // Для регулирования вложенностей в дереве
             if (tvObjectTree.SelectedNode != null)
             {
-                node = tvObjectTree.SelectedNode.Nodes.Add(CommonTypes.Data.CommonTypes.NoteTypeDesc[(byte)nodeType]);
+                node = tvObjectTree.SelectedNode.Nodes.Add(CommonTypes.Data.CommonTypes.NodeTypeDesc[(byte)nodeType]);
             }
             else
             {
                 //  Если узел не выбран, то цепляемся к корневому узлу
                 TreeNode root = tvObjectTree.Nodes[0];
-                node = root.Nodes.Add(CommonTypes.Data.CommonTypes.NoteTypeDesc[(byte)nodeType]);
+                node = root.Nodes.Add(CommonTypes.Data.CommonTypes.NodeTypeDesc[(byte)nodeType]);
             }
                
 
@@ -203,8 +204,8 @@ namespace NoteManager
                                           node.Text,
                                           nodeType,
                                           -1,
-                                          new System.Text.StringBuilder()
-                                         );
+                                          new MemoryStream()
+                                          );
             }
             else
             {
@@ -212,7 +213,7 @@ namespace NoteManager
                                           node.Parent == null ? -1 : ((ObjectData)node.Parent.Tag).ObjectID,
                                           node.Text,
                                           nodeType
-                                         );
+                                          );
             }
 
             // Ставим отметку для БД. При загрузке из БД статус по умолчанию будет - DataNoneChange 
@@ -265,12 +266,16 @@ namespace NoteManager
                     switch (((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType)
                     {
                         case ObjectType.FolderNode:
-                            // Здесь ничего не меняется
+                        case ObjectType.RootNode:
+                            // Здесь убираем контрол заметки
                             tsAddFolder.Enabled = true;
+                            ncNote.Visible = false;
                             break;
                         case ObjectType.NoteNode:
-                            // Здесь блокируется кнопка добавления объектов
+                            // Здесь блокируется кнопка добавления объектов и появляется контрол редактора текста
                             tsAddFolder.Enabled = false;
+                            ncNote.Visible = true;
+                            ncNote.SetObjectData((ObjectData)tvObjectTree.SelectedNode.Tag);
                             break;
                     }
                 }
@@ -335,9 +340,9 @@ namespace NoteManager
             ObjectDataManager.ObjectDataList.Clear();
         }
 
-        private void btnApplyChanges_Click(object sender, EventArgs e)
+        private void SaveToDataBase(object sender, EventArgs e)
         {
-            btnApplyChanges.Enabled = !_databaseManager.UpdateObjectsInDatabase();
+            btnSaveToDB.Enabled = !_databaseManager.SaveToDataBase();
         }
 
         private void tvObjectTree_MouseDown(object sender, MouseEventArgs e)
@@ -349,8 +354,7 @@ namespace NoteManager
         private void tvObjectTree_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             // Возникает после изменения измения имени узла
-            ((ObjectData)e.Node.Tag).ObjectName = e.Label;             
-            
+            ((ObjectData)e.Node.Tag).ObjectName = e.Label;                       
         }
 
         private void tvObjectTree_KeyDown(object sender, KeyEventArgs e)
@@ -362,7 +366,8 @@ namespace NoteManager
             // Удаление по клавише Delete
             // Не должно работать с корневым узлом
             if (e.KeyValue == (int)Keys.Delete && !IsRootNode)
-                RemoveNode(tvObjectTree.SelectedNode);
+                if (tvObjectTree.SelectedNode is not null)
+                    RemoveNode(tvObjectTree.SelectedNode);
         }
 
         /// <summary>
@@ -370,5 +375,14 @@ namespace NoteManager
         /// Сделано для ограничения взаимодействий с корневым узлом (запрет на удаление и, возможно, что-то еще).
         /// </summary>
         private bool IsRootNode => tvObjectTree.SelectedNode == tvObjectTree.Nodes[0];
+        
+        private void tsBtnAddNode_DropDownOpened(object sender, EventArgs e)
+        {
+            if (tvObjectTree.SelectedNode is not null)
+            {
+                tsAddNote.Enabled = ((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType != ObjectType.NoteNode;
+                tsAddFolder.Enabled = ((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType != ObjectType.NoteNode;
+            }
+        }
     }
 }
