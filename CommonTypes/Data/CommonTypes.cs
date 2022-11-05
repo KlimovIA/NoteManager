@@ -1,5 +1,4 @@
-﻿
-namespace NoteManager.CommonTypes.Data
+﻿namespace NoteManager.CommonTypes.Data
 {
     public static class CommonTypes
     {

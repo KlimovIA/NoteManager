@@ -1,14 +1,5 @@
 ﻿using NoteManager.CommonTypes.Data;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace NoteManager.Visual
 {
@@ -29,7 +20,7 @@ namespace NoteManager.Visual
         private void UpdateNote()
         {
             redtNote.Clear();
-            redtNote.Text = _objectData?.Note?.ToString() ?? string.Empty;
+            redtNote.Rtf = Encoding.Unicode.GetString(_objectData.Note.ToArray());
             lblDataSource.Text = _objectData?.DataSource?.SourceName ?? Constants.NoDataSource;
         }
 
@@ -48,8 +39,8 @@ namespace NoteManager.Visual
         private void SaveText(object sender, EventArgs e)
         {
             // Сохраняем содержимое richEdit в память объекта данных
-            _objectData?.Note?.Clear();
-            _objectData?.Note?.Append(redtNote.Text);
+            _objectData.Note.Dispose();
+            _objectData.Note = new MemoryStream(Encoding.UTF8.GetBytes(redtNote.Rtf));
         }
 
         private void OpenTextFile(object sender, EventArgs e)
@@ -139,7 +130,7 @@ namespace NoteManager.Visual
         /// Устанавливает курсив на выделенном тексте. 
         /// </summary>
         private void SetItalicOnSelection(object sender, EventArgs e)
-        {
+        {           
             redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
                                               redtNote.SelectionFont.Size,
                                               redtNote.SelectionFont.Style ^ FontStyle.Italic);
