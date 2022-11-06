@@ -236,7 +236,7 @@ namespace NoteManager.Database
                 // Удаляем объект из БД
                 command.CommandText = @$"DELETE FROM Nodes 
                                          WHERE ItemID ={objectID}";
-                command.CommandType = System.Data.CommandType.Text;
+                command.CommandType = CommandType.Text;
                 command.ExecuteNonQuery();
 
                 // Удаляем номер из списка идентификаторов                   

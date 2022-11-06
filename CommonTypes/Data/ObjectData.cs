@@ -8,7 +8,7 @@ namespace NoteManager.CommonTypes.Data
     {
         private int _parentID;
         private int _objectID;
-        private string _objectName = "";
+        private string _objectName;
         private readonly ObjectType _objectType;
         private int _dataSourceID;
         private DataSource? _dataSource;
