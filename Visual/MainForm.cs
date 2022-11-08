@@ -354,7 +354,8 @@ namespace NoteManager
         private void tvObjectTree_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             // Возникает после изменения измения имени узла
-            ((ObjectData)e.Node.Tag).ObjectName = e.Label;                       
+            if (e.Label is not null)
+                ((ObjectData)e.Node.Tag).ObjectName = e.Label;                       
         }
 
         private void tvObjectTree_KeyDown(object sender, KeyEventArgs e)

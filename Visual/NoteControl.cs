@@ -1,4 +1,5 @@
 ﻿using NoteManager.CommonTypes.Data;
+using System.ComponentModel;
 using System.Text;
 
 namespace NoteManager.Visual
@@ -20,8 +21,12 @@ namespace NoteManager.Visual
         private void UpdateNote()
         {
             redtNote.Clear();
-            redtNote.Rtf = Encoding.Unicode.GetString(_objectData.Note.ToArray());
-            lblDataSource.Text = _objectData?.DataSource?.SourceName ?? Constants.NoDataSource;
+            if (_objectData.Note.Capacity > 0)
+            {
+                _objectData.Note.Position = 0;
+                redtNote.LoadFile(_objectData.Note, RichTextBoxStreamType.RichText);
+                lblDataSource.Text = _objectData?.DataSource?.SourceName ?? Constants.NoDataSource;
+            }
         }
 
         /// <summary>
@@ -38,9 +43,15 @@ namespace NoteManager.Visual
 
         private void SaveText(object sender, EventArgs e)
         {
+            _objectData?.Note?.Dispose();
+            _objectData.Note = new MemoryStream();
             // Сохраняем содержимое richEdit в память объекта данных
-            _objectData.Note.Dispose();
-            _objectData.Note = new MemoryStream(Encoding.UTF8.GetBytes(redtNote.Rtf));
+            redtNote.SaveFile(_objectData.Note, RichTextBoxStreamType.RichText);
+            
+            // Отмечаем, что данные обновились, и при сохранении в БД это нужно учитывать.          
+            // Но в случае, если узел только создан без сохранения в БД, то статус не меняем.
+            if (_objectData.DataStatus != CommonTypes.Enums.DataStatus.DataAdd)
+                _objectData.DataStatus = CommonTypes.Enums.DataStatus.DataUpdate;
         }
 
         private void OpenTextFile(object sender, EventArgs e)
@@ -159,7 +170,7 @@ namespace NoteManager.Visual
             UpdateTextSettings(null, new EventArgs());
         }
 
-        private void UpdateTextSettings(object sender, EventArgs e)
+        private void UpdateTextSettings(object? sender, EventArgs e)
         {
             // Обновляем состояние панели редактора текста
 
