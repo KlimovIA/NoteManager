@@ -202,7 +202,7 @@ namespace NoteManager.Database
             string objectName = objData.ObjectName;
             int objectType = (int)objData.ObjectType;
             int sourceID = objData.SourceID;
-            byte[] noteText = objData.Note.ToArray();
+            byte[] noteText = objData.Note?.ToArray();
 
             using (SqliteCommand command = new SqliteCommand(null, _connection, _transaction))
             {
@@ -215,13 +215,10 @@ namespace NoteManager.Database
                 command.Parameters.Add(new SqliteParameter("@objectName", objectName));
                 command.Parameters.Add(new SqliteParameter("@objectTypeID", objectType));
                 command.Parameters.Add(new SqliteParameter("@sourceID", sourceID));              
-                command.Parameters.Add(new SqliteParameter("@noteText", noteText));
+                command.Parameters.Add(new SqliteParameter("@noteText", noteText is null? "NULL": noteText));
 
                 command.CommandType = CommandType.Text;
                 command.ExecuteNonQuery();
-
-                // Удаляем номер из списка идентификаторов
-                ItemIDManager.RemoveItemID(objectID);
             }
             // Помечаем, что работа с этим объектом завершена и больше повторять эти действия не надо будет.
             objData.DataStatus = DataStatus.DataNoneChange;
@@ -250,7 +247,7 @@ namespace NoteManager.Database
             int parentID = objData.ParentID;
             int sourceID = objData.SourceID;
             string objectName = objData.ObjectName;
-            byte[] noteText = objData.Note.ToArray();
+            byte[] noteText = objData.Note?.ToArray();
 
             using (SqliteCommand command = new SqliteCommand(null, _connection, _transaction))
             {
@@ -265,12 +262,13 @@ namespace NoteManager.Database
                 command.Parameters.Add(new SqliteParameter("@parentObjectID", parentID));
                 command.Parameters.Add(new SqliteParameter("@objectName", objectName));
                 command.Parameters.Add(new SqliteParameter("@sourceID", sourceID));
-                command.Parameters.Add(new SqliteParameter("@noteText", noteText));
+                command.Parameters.Add(new SqliteParameter("@noteText", noteText is null ? "NULL" : noteText));
                 command.Parameters.Add(new SqliteParameter("@objectID", objectID));
 
                 command.CommandType = CommandType.Text;
                 command.ExecuteNonQuery();
             }
+            // Помечаем, что работа с этим объектом завершена и больше повторять эти действия не надо будет.
             objData.DataStatus = DataStatus.DataNoneChange;
         }
         private void RaiseDatabaseActionEvent(string Message) => DatabaseActionEvent?.Invoke(Message);

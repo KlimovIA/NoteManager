@@ -1,4 +1,5 @@
 ﻿using NoteManager.CommonTypes.Data;
+using System.ComponentModel;
 using System.Text;
 
 namespace NoteManager.Visual
@@ -20,8 +21,12 @@ namespace NoteManager.Visual
         private void UpdateNote()
         {
             redtNote.Clear();
-            redtNote.LoadFile(_objectData.Note, RichTextBoxStreamType.RichText);          
-            lblDataSource.Text = _objectData?.DataSource?.SourceName ?? Constants.NoDataSource;
+            if (_objectData.Note.Capacity > 0)
+            {
+                _objectData.Note.Position = 0;
+                redtNote.LoadFile(_objectData.Note, RichTextBoxStreamType.RichText);
+                lblDataSource.Text = _objectData?.DataSource?.SourceName ?? Constants.NoDataSource;
+            }
         }
 
         /// <summary>
@@ -38,7 +43,7 @@ namespace NoteManager.Visual
 
         private void SaveText(object sender, EventArgs e)
         {
-            _objectData.Note.Dispose();
+            _objectData?.Note?.Dispose();
             _objectData.Note = new MemoryStream();
             // Сохраняем содержимое richEdit в память объекта данных
             redtNote.SaveFile(_objectData.Note, RichTextBoxStreamType.RichText);
@@ -165,7 +170,7 @@ namespace NoteManager.Visual
             UpdateTextSettings(null, new EventArgs());
         }
 
-        private void UpdateTextSettings(object sender, EventArgs e)
+        private void UpdateTextSettings(object? sender, EventArgs e)
         {
             // Обновляем состояние панели редактора текста
 
