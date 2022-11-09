@@ -62,9 +62,10 @@
             this.redtNote.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.redtNote.Location = new System.Drawing.Point(3, 53);
+            this.redtNote.Location = new System.Drawing.Point(3, 71);
+            this.redtNote.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.redtNote.Name = "redtNote";
-            this.redtNote.Size = new System.Drawing.Size(526, 384);
+            this.redtNote.Size = new System.Drawing.Size(601, 511);
             this.redtNote.TabIndex = 0;
             this.redtNote.Text = "";
             this.redtNote.SelectionChanged += new System.EventHandler(this.UpdateTextSettings);
@@ -73,9 +74,9 @@
             // 
             this.lblDataSoruceDesc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblDataSoruceDesc.AutoSize = true;
-            this.lblDataSoruceDesc.Location = new System.Drawing.Point(3, 440);
+            this.lblDataSoruceDesc.Location = new System.Drawing.Point(3, 587);
             this.lblDataSoruceDesc.Name = "lblDataSoruceDesc";
-            this.lblDataSoruceDesc.Size = new System.Drawing.Size(108, 15);
+            this.lblDataSoruceDesc.Size = new System.Drawing.Size(134, 20);
             this.lblDataSoruceDesc.TabIndex = 1;
             this.lblDataSoruceDesc.Text = "Источник данных:";
             // 
@@ -83,9 +84,9 @@
             // 
             this.lblDataSource.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblDataSource.AutoSize = true;
-            this.lblDataSource.Location = new System.Drawing.Point(117, 440);
+            this.lblDataSource.Location = new System.Drawing.Point(134, 587);
             this.lblDataSource.Name = "lblDataSource";
-            this.lblDataSource.Size = new System.Drawing.Size(171, 15);
+            this.lblDataSource.Size = new System.Drawing.Size(212, 20);
             this.lblDataSource.TabIndex = 2;
             this.lblDataSource.TabStop = true;
             this.lblDataSource.Text = "Источник данных отсутствует";
@@ -94,9 +95,9 @@
             // 
             this.lblChooseDataSource.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblChooseDataSource.AutoSize = true;
-            this.lblChooseDataSource.Location = new System.Drawing.Point(3, 464);
+            this.lblChooseDataSource.Location = new System.Drawing.Point(3, 619);
             this.lblChooseDataSource.Name = "lblChooseDataSource";
-            this.lblChooseDataSource.Size = new System.Drawing.Size(153, 15);
+            this.lblChooseDataSource.Size = new System.Drawing.Size(193, 20);
             this.lblChooseDataSource.TabIndex = 3;
             this.lblChooseDataSource.TabStop = true;
             this.lblChooseDataSource.Text = "Выбрать источник данных";
@@ -106,9 +107,9 @@
             // 
             this.lblCleanDataSource.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblCleanDataSource.AutoSize = true;
-            this.lblCleanDataSource.Location = new System.Drawing.Point(170, 464);
+            this.lblCleanDataSource.Location = new System.Drawing.Point(194, 619);
             this.lblCleanDataSource.Name = "lblCleanDataSource";
-            this.lblCleanDataSource.Size = new System.Drawing.Size(158, 15);
+            this.lblCleanDataSource.Size = new System.Drawing.Size(197, 20);
             this.lblCleanDataSource.TabIndex = 4;
             this.lblCleanDataSource.TabStop = true;
             this.lblCleanDataSource.Text = "Очистить источник данных";
@@ -117,12 +118,13 @@
             // 
             this.tsFunctions.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.tsFunctions.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.tsFunctions.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.tsFunctions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnSaveText,
             this.btnOpenFile});
             this.tsFunctions.Location = new System.Drawing.Point(0, 0);
             this.tsFunctions.Name = "tsFunctions";
-            this.tsFunctions.Size = new System.Drawing.Size(532, 25);
+            this.tsFunctions.Size = new System.Drawing.Size(608, 27);
             this.tsFunctions.TabIndex = 5;
             // 
             // btnSaveText
@@ -131,7 +133,7 @@
             this.btnSaveText.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveText.Image")));
             this.btnSaveText.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSaveText.Name = "btnSaveText";
-            this.btnSaveText.Size = new System.Drawing.Size(23, 22);
+            this.btnSaveText.Size = new System.Drawing.Size(29, 24);
             this.btnSaveText.Text = "Сохранить";
             this.btnSaveText.Click += new System.EventHandler(this.SaveText);
             // 
@@ -141,7 +143,7 @@
             this.btnOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenFile.Image")));
             this.btnOpenFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnOpenFile.Name = "btnOpenFile";
-            this.btnOpenFile.Size = new System.Drawing.Size(23, 22);
+            this.btnOpenFile.Size = new System.Drawing.Size(29, 24);
             this.btnOpenFile.Text = "Открыть текстовый файл";
             this.btnOpenFile.Click += new System.EventHandler(this.OpenTextFile);
             // 
@@ -156,6 +158,7 @@
             // 
             this.tsTextFunctions.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.tsTextFunctions.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.tsTextFunctions.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.tsTextFunctions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cbbFontNames,
             this.cbbFontSizes,
@@ -171,20 +174,22 @@
             this.btnCenterTextAlign,
             this.btnRightTextAlign});
             this.tsTextFunctions.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.tsTextFunctions.Location = new System.Drawing.Point(0, 25);
+            this.tsTextFunctions.Location = new System.Drawing.Point(0, 27);
             this.tsTextFunctions.Name = "tsTextFunctions";
-            this.tsTextFunctions.Size = new System.Drawing.Size(532, 25);
+            this.tsTextFunctions.Size = new System.Drawing.Size(608, 28);
             this.tsTextFunctions.TabIndex = 6;
             // 
             // cbbFontNames
             // 
             this.cbbFontNames.Name = "cbbFontNames";
-            this.cbbFontNames.Size = new System.Drawing.Size(121, 25);
+            this.cbbFontNames.Size = new System.Drawing.Size(138, 28);
+            this.cbbFontNames.SelectedIndexChanged += new System.EventHandler(this.ChangeFontName);
             // 
             // cbbFontSizes
             // 
             this.cbbFontSizes.Name = "cbbFontSizes";
-            this.cbbFontSizes.Size = new System.Drawing.Size(75, 25);
+            this.cbbFontSizes.Size = new System.Drawing.Size(85, 28);
+            this.cbbFontSizes.SelectedIndexChanged += new System.EventHandler(this.ChangeFontSize);
             // 
             // btnFontSizeUp
             // 
@@ -192,7 +197,7 @@
             this.btnFontSizeUp.Image = ((System.Drawing.Image)(resources.GetObject("btnFontSizeUp.Image")));
             this.btnFontSizeUp.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnFontSizeUp.Name = "btnFontSizeUp";
-            this.btnFontSizeUp.Size = new System.Drawing.Size(23, 22);
+            this.btnFontSizeUp.Size = new System.Drawing.Size(29, 25);
             this.btnFontSizeUp.Text = "Увеличить шрифт";
             this.btnFontSizeUp.Click += new System.EventHandler(this.FontSizeUp);
             // 
@@ -202,14 +207,14 @@
             this.btnFontSizeDown.Image = ((System.Drawing.Image)(resources.GetObject("btnFontSizeDown.Image")));
             this.btnFontSizeDown.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnFontSizeDown.Name = "btnFontSizeDown";
-            this.btnFontSizeDown.Size = new System.Drawing.Size(23, 22);
+            this.btnFontSizeDown.Size = new System.Drawing.Size(29, 25);
             this.btnFontSizeDown.Text = "Уменьшить шрифт";
             this.btnFontSizeDown.Click += new System.EventHandler(this.FontSizeDown);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 28);
             // 
             // btnBoldFont
             // 
@@ -218,7 +223,7 @@
             this.btnBoldFont.Image = ((System.Drawing.Image)(resources.GetObject("btnBoldFont.Image")));
             this.btnBoldFont.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnBoldFont.Name = "btnBoldFont";
-            this.btnBoldFont.Size = new System.Drawing.Size(23, 22);
+            this.btnBoldFont.Size = new System.Drawing.Size(29, 25);
             this.btnBoldFont.Text = "Полужирный текст";
             this.btnBoldFont.Click += new System.EventHandler(this.SetBoldOnSelection);
             // 
@@ -229,7 +234,7 @@
             this.btnItalicFont.Image = ((System.Drawing.Image)(resources.GetObject("btnItalicFont.Image")));
             this.btnItalicFont.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnItalicFont.Name = "btnItalicFont";
-            this.btnItalicFont.Size = new System.Drawing.Size(23, 22);
+            this.btnItalicFont.Size = new System.Drawing.Size(29, 25);
             this.btnItalicFont.Text = "Курсивный текст";
             this.btnItalicFont.Click += new System.EventHandler(this.SetItalicOnSelection);
             // 
@@ -240,7 +245,7 @@
             this.btnUnderlineFont.Image = ((System.Drawing.Image)(resources.GetObject("btnUnderlineFont.Image")));
             this.btnUnderlineFont.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnUnderlineFont.Name = "btnUnderlineFont";
-            this.btnUnderlineFont.Size = new System.Drawing.Size(23, 22);
+            this.btnUnderlineFont.Size = new System.Drawing.Size(29, 25);
             this.btnUnderlineFont.Text = "Подчёркнутый текст";
             this.btnUnderlineFont.Click += new System.EventHandler(this.SetUnderlineOnSelection);
             // 
@@ -251,7 +256,7 @@
             this.btnStrikeoutFont.Image = ((System.Drawing.Image)(resources.GetObject("btnStrikeoutFont.Image")));
             this.btnStrikeoutFont.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnStrikeoutFont.Name = "btnStrikeoutFont";
-            this.btnStrikeoutFont.Size = new System.Drawing.Size(23, 22);
+            this.btnStrikeoutFont.Size = new System.Drawing.Size(29, 25);
             this.btnStrikeoutFont.Text = "Перечёркнутый текст";
             this.btnStrikeoutFont.ToolTipText = "btn";
             this.btnStrikeoutFont.Click += new System.EventHandler(this.SetStrikeoutOnSelection);
@@ -259,7 +264,7 @@
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 28);
             // 
             // btnLeftTextAlign
             // 
@@ -268,7 +273,7 @@
             this.btnLeftTextAlign.Image = ((System.Drawing.Image)(resources.GetObject("btnLeftTextAlign.Image")));
             this.btnLeftTextAlign.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnLeftTextAlign.Name = "btnLeftTextAlign";
-            this.btnLeftTextAlign.Size = new System.Drawing.Size(23, 22);
+            this.btnLeftTextAlign.Size = new System.Drawing.Size(29, 25);
             this.btnLeftTextAlign.Text = "Выровнять по левому краю";
             this.btnLeftTextAlign.Click += new System.EventHandler(this.SetLeftAlignmentOnSelection);
             // 
@@ -279,7 +284,7 @@
             this.btnCenterTextAlign.Image = ((System.Drawing.Image)(resources.GetObject("btnCenterTextAlign.Image")));
             this.btnCenterTextAlign.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnCenterTextAlign.Name = "btnCenterTextAlign";
-            this.btnCenterTextAlign.Size = new System.Drawing.Size(23, 22);
+            this.btnCenterTextAlign.Size = new System.Drawing.Size(29, 25);
             this.btnCenterTextAlign.Text = "Выровнять по центру";
             this.btnCenterTextAlign.Click += new System.EventHandler(this.SetCenterAlignmentOnSelection);
             // 
@@ -290,13 +295,13 @@
             this.btnRightTextAlign.Image = ((System.Drawing.Image)(resources.GetObject("btnRightTextAlign.Image")));
             this.btnRightTextAlign.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnRightTextAlign.Name = "btnRightTextAlign";
-            this.btnRightTextAlign.Size = new System.Drawing.Size(23, 22);
+            this.btnRightTextAlign.Size = new System.Drawing.Size(29, 25);
             this.btnRightTextAlign.Text = "Выровнять по правому краю";
             this.btnRightTextAlign.Click += new System.EventHandler(this.SetRightAlignmentOnSelection);
             // 
             // NoteControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.Controls.Add(this.tsTextFunctions);
@@ -306,8 +311,9 @@
             this.Controls.Add(this.lblDataSource);
             this.Controls.Add(this.lblDataSoruceDesc);
             this.Controls.Add(this.redtNote);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "NoteControl";
-            this.Size = new System.Drawing.Size(532, 488);
+            this.Size = new System.Drawing.Size(608, 651);
             this.Load += new System.EventHandler(this.NoteControlLoad);
             this.tsFunctions.ResumeLayout(false);
             this.tsFunctions.PerformLayout();

@@ -18,11 +18,20 @@ namespace NoteManager
             InitializeComponent();
             InitImageList();
             InitMainRootNode();
-                        
+            InitNoteControl();
+
             _databaseManager = new DatabaseManager();
             _databaseManager.DatabaseActionEvent += ShowActionMessage;
 
             LoadObjectsFromDatabase();
+        }
+
+        /// <summary>
+        /// Инициирует контрол заметки, подвязывает callback функции, если таковые имеются.
+        /// </summary>
+        private void InitNoteControl()
+        {
+            ncNote.OnChange += ActivateSaveDBButton;
         }
 
         /// <summary>
@@ -81,6 +90,10 @@ namespace NoteManager
             {
                 ((ObjectData)node.Tag).DataStatus = DataStatus.DataDelete;
                 node.Remove();
+                
+                // Фиксируем, что произошли изменения, которые можно сохранить в БД
+                ActivateSaveDBButton();
+                
                 return;
             }
             else
@@ -231,6 +244,9 @@ namespace NoteManager
             tvObjectTree.SelectedNode = node;
 
             tvObjectTree.EndUpdate();
+
+            // Фиксируем, что произошли изменения, которые можно сохранить в БД
+            ActivateSaveDBButton();
         }
 
         private void tsAddFolder_Click(object sender, EventArgs e)
@@ -332,7 +348,7 @@ namespace NoteManager
         private void tsBtnRemoveNode_Click(object sender, EventArgs e)
         {
             if (tvObjectTree.SelectedNode != null)
-                RemoveNode(tvObjectTree.SelectedNode);
+                RemoveNode(tvObjectTree.SelectedNode);           
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -385,5 +401,7 @@ namespace NoteManager
                 tsAddFolder.Enabled = ((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType != ObjectType.NoteNode;
             }
         }
+
+        private void ActivateSaveDBButton() => btnSaveToDB.Enabled = true;
     }
 }
