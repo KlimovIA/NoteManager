@@ -7,13 +7,16 @@ namespace NoteManager.Visual
     public partial class NoteControl : UserControl
     {
         private ObjectData? _objectData;
+
+        public delegate void OnChangeHandler();
+        public event OnChangeHandler OnChange;
         public NoteControl()
         {
             InitializeComponent();
         }
 
         public void SetObjectData(ObjectData objectData)
-        { 
+        {
             _objectData = objectData;
             UpdateNote();
         }
@@ -41,20 +44,28 @@ namespace NoteManager.Visual
             }
         }
 
+        /// <summary>
+        /// Сохраняет текст в объект данных.
+        /// </summary>
         private void SaveText(object sender, EventArgs e)
         {
             _objectData?.Note?.Dispose();
             _objectData.Note = new MemoryStream();
             // Сохраняем содержимое richEdit в память объекта данных
             redtNote.SaveFile(_objectData.Note, RichTextBoxStreamType.RichText);
-            
+
             // Отмечаем, что данные обновились, и при сохранении в БД это нужно учитывать.          
             // Но в случае, если узел только создан без сохранения в БД, то статус не меняем.
             if (_objectData.DataStatus != CommonTypes.Enums.DataStatus.DataAdd)
                 _objectData.DataStatus = CommonTypes.Enums.DataStatus.DataUpdate;
+
+            DoOnChange();
         }
 
-        private void OpenTextFile(object sender, EventArgs e)
+        /// <summary>
+        /// Заполняет поле с заметкой из текстового файла.
+        /// </summary>
+        private async void OpenTextFile(object sender, EventArgs e)
         {
             // Открываем текстовый файл и кидаем его содержимое в richEdit
             using (OpenFileDialog OPD = new OpenFileDialog())
@@ -68,8 +79,8 @@ namespace NoteManager.Visual
                     {
                         // Предварительно чистим поле ввода
                         redtNote.Clear();
-                        redtNote.Text = reader.ReadToEnd();
-                    }    
+                        redtNote.Text = await reader.ReadToEndAsync();
+                    }
                 }
             }
         }
@@ -121,7 +132,7 @@ namespace NoteManager.Visual
         private void FontSizeDown(object sender, EventArgs e)
         {
             redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
-                                              redtNote.SelectionFont.Size - 1, 
+                                              redtNote.SelectionFont.Size - 1,
                                               redtNote.SelectionFont.Style);
             UpdateTextSettings(null, new EventArgs());
         }
@@ -141,7 +152,7 @@ namespace NoteManager.Visual
         /// Устанавливает курсив на выделенном тексте. 
         /// </summary>
         private void SetItalicOnSelection(object sender, EventArgs e)
-        {           
+        {
             redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
                                               redtNote.SelectionFont.Size,
                                               redtNote.SelectionFont.Style ^ FontStyle.Italic);
@@ -184,7 +195,7 @@ namespace NoteManager.Visual
             btnLeftTextAlign.Checked = redtNote.SelectionAlignment == HorizontalAlignment.Left;
             btnCenterTextAlign.Checked = redtNote.SelectionAlignment == HorizontalAlignment.Center;
             btnRightTextAlign.Checked = redtNote.SelectionAlignment == HorizontalAlignment.Right;
-             
+
 
             // Проверяем выбранный шрифт и размер шрифта
             cbbFontNames.SelectedItem = redtNote.SelectionFont.Name;
@@ -207,6 +218,33 @@ namespace NoteManager.Visual
         {
             redtNote.SelectionAlignment = HorizontalAlignment.Right;
             UpdateTextSettings(null, new EventArgs());
+        }
+
+        /// <summary>
+        /// Вызывается при возникновении сохраненных изменений в редакторе текста. Активирует конпку сохранения в БД.
+        /// </summary>
+        private void DoOnChange() => OnChange?.Invoke();
+
+        /// <summary>
+        /// Вызывается при изменении шрифта через комбобокс. 
+        /// </summary>
+        private void ChangeFontName(object sender, EventArgs e)
+        {
+            redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
+                                              redtNote.SelectionFont.Size,
+                                              redtNote.SelectionFont.Style);
+            redtNote.Focus();
+        }
+
+        /// <summary>
+        /// Вызывается при изменении размера шрифта через комбобокс.
+        /// </summary>
+        private void ChangeFontSize(object sender, EventArgs e)
+        {
+            redtNote.SelectionFont = new Font(redtNote.SelectionFont.Name,
+                                              float.Parse(cbbFontSizes.SelectedItem.ToString()),
+                                              redtNote.SelectionFont.Style);
+            redtNote.Focus();
         }
     }
 }

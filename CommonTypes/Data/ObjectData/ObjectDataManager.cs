@@ -11,7 +11,7 @@ namespace NoteManager.CommonTypes.Data
         private static readonly List<ObjectData> _objectDataList = new List<ObjectData>();
 
         public static List<ObjectData> ObjectDataList
-        { 
+        {
             get => _objectDataList;
         }
     }

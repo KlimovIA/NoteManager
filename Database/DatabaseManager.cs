@@ -4,6 +4,7 @@ using Microsoft.Data.Sqlite;
 using System.Text;
 using System.Data;
 using System.ComponentModel;
+using NoteManager.CommonTypes.Data.Debug;
 
 namespace NoteManager.Database
 {

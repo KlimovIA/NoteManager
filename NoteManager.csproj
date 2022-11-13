@@ -10,6 +10,9 @@
     <StartupObject>NoteManager.Program</StartupObject>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <FileVersion></FileVersion>
+    <AssemblyVersion></AssemblyVersion>
+    <Version>0.0.4</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
