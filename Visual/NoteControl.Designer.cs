@@ -79,6 +79,7 @@
             this.lblDataSoruceDesc.Size = new System.Drawing.Size(134, 20);
             this.lblDataSoruceDesc.TabIndex = 1;
             this.lblDataSoruceDesc.Text = "Источник данных:";
+            this.lblDataSoruceDesc.Visible = false;
             // 
             // lblDataSource
             // 
@@ -90,6 +91,7 @@
             this.lblDataSource.TabIndex = 2;
             this.lblDataSource.TabStop = true;
             this.lblDataSource.Text = "Источник данных отсутствует";
+            this.lblDataSource.Visible = false;
             // 
             // lblChooseDataSource
             // 
@@ -101,6 +103,7 @@
             this.lblChooseDataSource.TabIndex = 3;
             this.lblChooseDataSource.TabStop = true;
             this.lblChooseDataSource.Text = "Выбрать источник данных";
+            this.lblChooseDataSource.Visible = false;
             this.lblChooseDataSource.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ChooseDataSource);
             // 
             // lblCleanDataSource
@@ -113,6 +116,7 @@
             this.lblCleanDataSource.TabIndex = 4;
             this.lblCleanDataSource.TabStop = true;
             this.lblCleanDataSource.Text = "Очистить источник данных";
+            this.lblCleanDataSource.Visible = false;
             // 
             // tsFunctions
             // 

@@ -63,11 +63,12 @@
             this.pnlObjectTreeContainer.Location = new System.Drawing.Point(0, 36);
             this.pnlObjectTreeContainer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pnlObjectTreeContainer.Name = "pnlObjectTreeContainer";
-            this.pnlObjectTreeContainer.Size = new System.Drawing.Size(256, 696);
+            this.pnlObjectTreeContainer.Size = new System.Drawing.Size(256, 710);
             this.pnlObjectTreeContainer.TabIndex = 1;
             // 
             // tvObjectTree
             // 
+            this.tvObjectTree.AllowDrop = true;
             this.tvObjectTree.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.tvObjectTree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tvObjectTree.ContextMenuStrip = this.msTreeView;
@@ -76,12 +77,16 @@
             this.tvObjectTree.Location = new System.Drawing.Point(0, 0);
             this.tvObjectTree.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tvObjectTree.Name = "tvObjectTree";
-            this.tvObjectTree.Size = new System.Drawing.Size(256, 696);
+            this.tvObjectTree.Size = new System.Drawing.Size(256, 710);
             this.tvObjectTree.TabIndex = 0;
-            this.tvObjectTree.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.tvObjectTree_AfterLabelEdit);
-            this.tvObjectTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvObjectTree_AfterSelect);
-            this.tvObjectTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tvObjectTree_KeyDown);
-            this.tvObjectTree.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tvObjectTree_MouseDown);
+            this.tvObjectTree.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.OnObjectTreeAfterLabelEdit);
+            this.tvObjectTree.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.OnObjectTreeItemDrag);
+            this.tvObjectTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.OnObjectTreeAfterSelect);
+            this.tvObjectTree.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnObjectTreeDragDrop);
+            this.tvObjectTree.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnObjectTreeDragEnter);
+            this.tvObjectTree.DragOver += new System.Windows.Forms.DragEventHandler(this.OnObjectTreeDragOver);
+            this.tvObjectTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnObjectTreeKeyDown);
+            this.tvObjectTree.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnObjectTreeMouseDown);
             // 
             // msTreeView
             // 
@@ -127,7 +132,7 @@
             this.tsFunctions.Location = new System.Drawing.Point(0, 0);
             this.tsFunctions.Margin = new System.Windows.Forms.Padding(1);
             this.tsFunctions.Name = "tsFunctions";
-            this.tsFunctions.Size = new System.Drawing.Size(965, 27);
+            this.tsFunctions.Size = new System.Drawing.Size(980, 27);
             this.tsFunctions.TabIndex = 1;
             // 
             // tsBtnAddNode
@@ -140,7 +145,7 @@
             this.tsBtnAddNode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnAddNode.Name = "tsBtnAddNode";
             this.tsBtnAddNode.Size = new System.Drawing.Size(34, 24);
-            this.tsBtnAddNode.DropDownOpened += new System.EventHandler(this.tsBtnAddNode_DropDownOpened);
+            this.tsBtnAddNode.DropDownOpened += new System.EventHandler(this.OnBtnAddNodeDropDownOpened);
             // 
             // tsAddFolder
             // 
@@ -176,7 +181,7 @@
             this.pnlMainContainer.Location = new System.Drawing.Point(256, 36);
             this.pnlMainContainer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pnlMainContainer.Name = "pnlMainContainer";
-            this.pnlMainContainer.Size = new System.Drawing.Size(709, 696);
+            this.pnlMainContainer.Size = new System.Drawing.Size(724, 710);
             this.pnlMainContainer.TabIndex = 2;
             // 
             // ncNote
@@ -188,7 +193,7 @@
             this.ncNote.Location = new System.Drawing.Point(3, 4);
             this.ncNote.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.ncNote.Name = "ncNote";
-            this.ncNote.Size = new System.Drawing.Size(697, 647);
+            this.ncNote.Size = new System.Drawing.Size(712, 661);
             this.ncNote.TabIndex = 1;
             // 
             // pnlApplyChanges
@@ -198,10 +203,10 @@
             this.pnlApplyChanges.Controls.Add(this.lbActionStatus);
             this.pnlApplyChanges.Controls.Add(this.btnSaveToDB);
             this.pnlApplyChanges.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlApplyChanges.Location = new System.Drawing.Point(0, 657);
+            this.pnlApplyChanges.Location = new System.Drawing.Point(0, 671);
             this.pnlApplyChanges.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pnlApplyChanges.Name = "pnlApplyChanges";
-            this.pnlApplyChanges.Size = new System.Drawing.Size(709, 39);
+            this.pnlApplyChanges.Size = new System.Drawing.Size(724, 39);
             this.pnlApplyChanges.TabIndex = 0;
             // 
             // lbActionStatus
@@ -215,7 +220,8 @@
             // btnSaveToDB
             // 
             this.btnSaveToDB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSaveToDB.Location = new System.Drawing.Point(577, 3);
+            this.btnSaveToDB.Enabled = false;
+            this.btnSaveToDB.Location = new System.Drawing.Point(583, 3);
             this.btnSaveToDB.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnSaveToDB.Name = "btnSaveToDB";
             this.btnSaveToDB.Size = new System.Drawing.Size(131, 31);
@@ -230,7 +236,7 @@
             this.splitter1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.splitter1.MinExtra = 10;
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 696);
+            this.splitter1.Size = new System.Drawing.Size(3, 710);
             this.splitter1.TabIndex = 2;
             this.splitter1.TabStop = false;
             // 
@@ -241,14 +247,14 @@
             this.pnlToolStripContainer.Location = new System.Drawing.Point(0, 0);
             this.pnlToolStripContainer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pnlToolStripContainer.Name = "pnlToolStripContainer";
-            this.pnlToolStripContainer.Size = new System.Drawing.Size(965, 36);
+            this.pnlToolStripContainer.Size = new System.Drawing.Size(980, 36);
             this.pnlToolStripContainer.TabIndex = 3;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(965, 732);
+            this.ClientSize = new System.Drawing.Size(980, 746);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.pnlMainContainer);
             this.Controls.Add(this.pnlObjectTreeContainer);
@@ -261,8 +267,9 @@
             this.Name = "MainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Менеждер заметок";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
-            this.Load += new System.EventHandler(this.MainForm_Load);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormCLosed);
+            this.Load += new System.EventHandler(this.OnFormLoad);
+            this.Shown += new System.EventHandler(this.OnFormShow);
             this.pnlObjectTreeContainer.ResumeLayout(false);
             this.msTreeView.ResumeLayout(false);
             this.tsFunctions.ResumeLayout(false);

@@ -7,14 +7,14 @@ namespace NoteManager.CommonTypes.Data
         private int _sourceID = -1;
         private string _sourceName = "";
         private NoteSourceType _noteSourceType = NoteSourceType.FromYoutube;
-        private string _description= "";
+        private string _description = "";
         private MemoryStream? _data = null;
-        
+
         /// <summary>
         /// Идентификатор источника.
         /// </summary>
         public int SourceID
-        { 
+        {
             get => _sourceID;
             set => _sourceID = value;
         }

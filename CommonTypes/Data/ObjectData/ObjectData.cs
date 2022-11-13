@@ -1,5 +1,5 @@
 ﻿using NoteManager.CommonTypes.Enums;
-using System.Text;
+
 
 namespace NoteManager.CommonTypes.Data
 {
@@ -13,15 +13,15 @@ namespace NoteManager.CommonTypes.Data
         private int _dataSourceID;
         private DataSource? _dataSource;
         private MemoryStream? _noteText;
-        private DataStatus _dataStatus;              
+        private DataStatus _dataStatus;
 
         /// <summary>
         /// ID узла. Применяется для взаимосвязи в дереве и для использования в БД.
         /// </summary>
         public int ObjectID
-        { 
+        {
             get => _objectID;
-            set => _objectID = value;   
+            set => _objectID = value;
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace NoteManager.CommonTypes.Data
         /// Ссылка на источник данных.
         /// </summary>
         public DataSource? DataSource
-        { 
+        {
             get => _dataSource;
             set => _dataSource = value;
         }
@@ -98,7 +98,7 @@ namespace NoteManager.CommonTypes.Data
         }
 
         public ObjectData(int objectID, int parentID, string objectName, ObjectType objectType)
-        {           
+        {
             _objectID = objectID;
             _parentID = parentID;
             _objectName = objectName;

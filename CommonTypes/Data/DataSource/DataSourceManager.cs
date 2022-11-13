@@ -3,12 +3,12 @@
     internal static class DataSourceManager
     {
         private static readonly List<DataSource> dataSources = new List<DataSource>();
-        
+
         /// <summary>
         /// Список объектов, хранящих информацию об источниках данных
         /// </summary>
         public static List<DataSource> DataSources
-        { 
+        {
             get => dataSources;
         }
 
@@ -28,7 +28,7 @@
         /// </summary>
         /// <param name="dataSource"> Ссылка на источик данных. </param>
         public static void AddDataSource(DataSource dataSource) => dataSources.Add(dataSource);
-        
+
         /// <summary>
         /// Удаляет источник данных из общего списка для взаимодействия.
         /// </summary>
