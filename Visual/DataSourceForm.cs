@@ -13,7 +13,7 @@ namespace NoteManager.Visual
 {
     public partial class DataSourceForm : Form
     {
-        private DataSource _dataSource;
+        private DataSource _dataSource = null;
         public DataSourceForm()
         {
             InitializeComponent();          

@@ -15,6 +15,11 @@ namespace NoteManager.CommonTypes.Data.Debug
 
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool FreeConsole();              
+        public static extern bool FreeConsole();
+
+        public static void WriteLogMessage(string message)
+        { 
+            Console.WriteLine($"[{DateTime.Now}] >> {message}");
+        }
     }
 }
