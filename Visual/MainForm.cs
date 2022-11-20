@@ -15,7 +15,6 @@ namespace NoteManager
             InitializeComponent();
             InitImageList();
             CreateMainRootNode();
-            InitNoteControl();
 
             _databaseManager = new DatabaseManager();
             _databaseManager.DatabaseActionEvent += ShowActionMessage;
@@ -31,10 +30,7 @@ namespace NoteManager
         /// <summary>
         /// Инициирует контрол заметки, подвязывает callback функции, если таковые имеются.
         /// </summary>
-        private void InitNoteControl()
-        {
-            ncNote.OnChange += ActivateSaveDBButton;
-        }
+
 
         private void CreateMainRootNode()
         {
@@ -280,16 +276,18 @@ namespace NoteManager
                         case ObjectType.FolderNode:
                         case ObjectType.RootNode:
                             // Здесь убираем контрол заметки
-                            tsAddFolder.Enabled = true;
-                            ncNote.Visible = false;
+                            tsAddFolder.Enabled = true;                           
                             break;
                         case ObjectType.NoteNode:
                             // Здесь блокируется кнопка добавления объектов и появляется контрол редактора текста
-                            tsAddFolder.Enabled = false;
-                            ncNote.Visible = true;
-                            ncNote.SetObjectData((ObjectData)tvObjectTree.SelectedNode.Tag);
+                            tsAddFolder.Enabled = false;                                                       
                             break;
                     }
+                    
+                    // Прокидываем все типы узлов в контрол. Сделано для корректного контроля потока
+                    // автосохранения текста в память.
+                    ncNote.SetObjectData((ObjectData)tvObjectTree.SelectedNode.Tag);
+                    
                     // Доп. проверка: если выбран корневой узел, то его нельзя удалять. Не смог его в тот кейз поместить.
                     if (((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType == ObjectType.RootNode)
                         tsBtnRemoveNode.Enabled = false;
@@ -336,7 +334,8 @@ namespace NoteManager
 
         private void SaveToDataBase(object sender, EventArgs e)
         {
-            btnSaveToDB.Enabled = !_databaseManager.SaveToDataBase();
+            //btnSaveToDB.Enabled = !_databaseManager.SaveToDataBase();
+            _databaseManager.SaveToDataBase();
         }
 
         private void OnObjectTreeMouseDown(object sender, MouseEventArgs e)

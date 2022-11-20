@@ -36,7 +36,6 @@
             this.lblChooseDataSource = new System.Windows.Forms.LinkLabel();
             this.lblCleanDataSource = new System.Windows.Forms.LinkLabel();
             this.tsFunctions = new System.Windows.Forms.ToolStrip();
-            this.btnSaveText = new System.Windows.Forms.ToolStripButton();
             this.btnOpenFile = new System.Windows.Forms.ToolStripButton();
             this.imgToolBar = new System.Windows.Forms.ImageList(this.components);
             this.tsTextFunctions = new System.Windows.Forms.ToolStrip();
@@ -124,22 +123,11 @@
             this.tsFunctions.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.tsFunctions.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.tsFunctions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnSaveText,
             this.btnOpenFile});
             this.tsFunctions.Location = new System.Drawing.Point(0, 0);
             this.tsFunctions.Name = "tsFunctions";
             this.tsFunctions.Size = new System.Drawing.Size(608, 27);
             this.tsFunctions.TabIndex = 5;
-            // 
-            // btnSaveText
-            // 
-            this.btnSaveText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnSaveText.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveText.Image")));
-            this.btnSaveText.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnSaveText.Name = "btnSaveText";
-            this.btnSaveText.Size = new System.Drawing.Size(29, 24);
-            this.btnSaveText.Text = "Сохранить";
-            this.btnSaveText.Click += new System.EventHandler(this.SaveText);
             // 
             // btnOpenFile
             // 
@@ -319,6 +307,7 @@
             this.Name = "NoteControl";
             this.Size = new System.Drawing.Size(608, 651);
             this.Load += new System.EventHandler(this.NoteControlLoad);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnNoteControlKeyDown);
             this.tsFunctions.ResumeLayout(false);
             this.tsFunctions.PerformLayout();
             this.tsTextFunctions.ResumeLayout(false);
@@ -336,7 +325,6 @@
         private LinkLabel lblChooseDataSource;
         private LinkLabel lblCleanDataSource;
         private ToolStrip tsFunctions;
-        private ToolStripButton btnSaveText;
         private ImageList imgToolBar;
         private ToolStripButton btnOpenFile;
         private ToolStrip tsTextFunctions;
