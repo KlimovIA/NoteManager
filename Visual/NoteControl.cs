@@ -28,21 +28,19 @@ namespace NoteManager.Visual
         {
             if (objectData.ObjectType == CommonTypes.Enums.ObjectType.NoteNode)
             {
+                // Стопим поток, чтобы переопределить объект, в который будет сохраняться текст.
                 Visible = true;
                 _threadStopper.Reset();
-                DebugConsole.WriteLogMessage("_threadStopper.Reset()");
-
 
                 _objectData = objectData;
                 UpdateNote();
 
-                DebugConsole.WriteLogMessage("_threadStopper.Set()");
+                // Возвращаем поток к работе               
                 _threadStopper.Set();
             }
             else
             {
-                Visible = false;
-                DebugConsole.WriteLogMessage("_threadStopper.Reset()");
+                Visible = false;             
                 _threadStopper.Reset();
             }
         }
@@ -52,8 +50,9 @@ namespace NoteManager.Visual
             const int AUTOSAVE_TIMEOUT = 1000;
             while (true)
             {
+                // Поток усыпляется по команде, по команде и просыпается, меняется лишь объект, в который
+                // будет записываться текст.
                 _threadStopper.WaitOne();
-                DebugConsole.WriteLogMessage("SaveTextInObjectData");
                 Invoke(new Action(SaveTextInObjectData));
                 Thread.Sleep(AUTOSAVE_TIMEOUT);
             }           
@@ -145,66 +144,18 @@ namespace NoteManager.Visual
             cbbFontSizes.SelectedItem = cbbFontSizes.Items[0];
         }
 
-        private void FontSizeUp(object sender, EventArgs e)
+        private void FontSizeUpDown(object sender, EventArgs e)
         {
-            redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
-                                              redtNote.SelectionFont.Size + 1,
+            // Универсальный метод для двух кнопок изменения размера шрифта на единицу (+1 или -1 в зависимости от задействованной кнопки)
+            string fontName = cbbFontNames.SelectedItem.ToString() ?? "";
+            int fontSize = sender == btnFontSizeUp ? 1 : -1;
+
+            redtNote.SelectionFont = new Font(fontName,
+                                              redtNote.SelectionFont.Size + fontSize,
                                               redtNote.SelectionFont.Style);
             UpdateTextSettings(null, new EventArgs());
         }
-
-        private void FontSizeDown(object sender, EventArgs e)
-        {
-            redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
-                                              redtNote.SelectionFont.Size - 1,
-                                              redtNote.SelectionFont.Style);
-            UpdateTextSettings(null, new EventArgs());
-        }
-
-        /// <summary>
-        /// Устанавливает полужирный шрифт на выделенном тексте.
-        /// </summary>
-        private void SetBoldOnSelection(object sender, EventArgs e)
-        {
-            redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
-                                              redtNote.SelectionFont.Size,
-                                              redtNote.SelectionFont.Style ^ FontStyle.Bold);
-            UpdateTextSettings(null, new EventArgs());
-        }
-
-        /// <summary>
-        /// Устанавливает курсив на выделенном тексте. 
-        /// </summary>
-        private void SetItalicOnSelection(object sender, EventArgs e)
-        {
-            redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
-                                              redtNote.SelectionFont.Size,
-                                              redtNote.SelectionFont.Style ^ FontStyle.Italic);
-            UpdateTextSettings(null, new EventArgs());
-        }
-
-        /// <summary>
-        /// Устанавливает подчеркивание на выделенном тексте.
-        /// </summary>
-        private void SetUnderlineOnSelection(object sender, EventArgs e)
-        {
-            redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
-                                              redtNote.SelectionFont.Size,
-                                              redtNote.SelectionFont.Style ^ FontStyle.Underline);
-            UpdateTextSettings(null, new EventArgs());
-        }
-
-        /// <summary>
-        /// Устанавливает перечеркивание на выделенном тексте.
-        /// </summary>     
-        private void SetStrikeoutOnSelection(object sender, EventArgs e)
-        {
-            redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
-                                              redtNote.SelectionFont.Size,
-                                              redtNote.SelectionFont.Style ^ FontStyle.Strikeout);
-            UpdateTextSettings(null, new EventArgs());
-        }
-
+           
         private void UpdateTextSettings(object? sender, EventArgs e)
         {
             // Обновляем состояние панели редактора текста
@@ -220,33 +171,40 @@ namespace NoteManager.Visual
             btnCenterTextAlign.Checked = redtNote.SelectionAlignment == HorizontalAlignment.Center;
             btnRightTextAlign.Checked = redtNote.SelectionAlignment == HorizontalAlignment.Right;
 
-
             // Проверяем выбранный шрифт и размер шрифта
             cbbFontNames.SelectedItem = redtNote.SelectionFont.Name;
             cbbFontSizes.Text = redtNote.SelectionFont.Size.ToString();
         }
 
-        private void SetLeftAlignmentOnSelection(object sender, EventArgs e)
+        private void SetAligmentOnSelectedText(object sender, EventArgs e)
         {
-            redtNote.SelectionAlignment = HorizontalAlignment.Left;
+            if (sender == btnLeftTextAlign)    redtNote.SelectionAlignment = HorizontalAlignment.Left;
+            if (sender == btnCenterTextAlign)  redtNote.SelectionAlignment = HorizontalAlignment.Center;
+            if (sender == btnRightTextAlign)   redtNote.SelectionAlignment = HorizontalAlignment.Right;
+
             UpdateTextSettings(null, new EventArgs());
         }
 
-        private void SetCenterAlignmentOnSelection(object sender, EventArgs e)
+        private void SetFontStyle(object sender, EventArgs e)
         {
-            redtNote.SelectionAlignment = HorizontalAlignment.Center;
-            UpdateTextSettings(null, new EventArgs());
-        }
+            string fontName = cbbFontNames.SelectedItem.ToString() ?? "";
+            FontStyle fontStyle = FontStyle.Regular;
 
-        private void SetRightAlignmentOnSelection(object sender, EventArgs e)
-        {
-            redtNote.SelectionAlignment = HorizontalAlignment.Right;
+            if (sender == btnBoldFont)      fontStyle = FontStyle.Bold;
+            if (sender == btnItalicFont)    fontStyle = FontStyle.Italic;
+            if (sender == btnStrikeoutFont) fontStyle = FontStyle.Strikeout;
+            if (sender == btnUnderlineFont) fontStyle = FontStyle.Underline;
+
+            redtNote.SelectionFont = new Font(fontName,
+                                              redtNote.SelectionFont.Size,
+                                              redtNote.SelectionFont.Style ^ fontStyle);
             UpdateTextSettings(null, new EventArgs());
         }
 
         private void ChangeFontName(object sender, EventArgs e)
         {
-            redtNote.SelectionFont = new Font(cbbFontNames.SelectedItem.ToString(),
+            string fontName = cbbFontNames.SelectedItem.ToString() ?? "";
+            redtNote.SelectionFont = new Font(fontName,
                                               redtNote.SelectionFont.Size,
                                               redtNote.SelectionFont.Style);
             redtNote.Focus();
@@ -255,14 +213,17 @@ namespace NoteManager.Visual
 
         private void ChangeFontSize(object sender, EventArgs e)
         {
+            float fontSize;
+            float.TryParse(cbbFontSizes.SelectedItem.ToString(), out fontSize);
             redtNote.SelectionFont = new Font(redtNote.SelectionFont.Name,
-                                              float.Parse(cbbFontSizes.SelectedItem.ToString()),
+                                              fontSize,
                                               redtNote.SelectionFont.Style);
             redtNote.Focus();
         }
 
         private void OnNoteControlKeyDown(object sender, KeyEventArgs e)
         {
+            // Пока мертво
             if (e.Control && e.KeyValue == (int)Keys.O)
                 OpenTextFile(null, new EventArgs());
         }

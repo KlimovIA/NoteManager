@@ -81,10 +81,6 @@ namespace NoteManager
             {
                 ((ObjectData)node.Tag).DataStatus = DataStatus.DataDelete;
                 node.Remove();
-
-                // Фиксируем, что произошли изменения, которые можно сохранить в БД
-                ActivateSaveDBButton();
-
                 return;
             }
             else
@@ -235,9 +231,6 @@ namespace NoteManager
             tvObjectTree.SelectedNode = node;
 
             tvObjectTree.EndUpdate();
-
-            // Фиксируем, что произошли изменения, которые можно сохранить в БД
-            ActivateSaveDBButton();
         }
 
         private void tsAddFolder_Click(object sender, EventArgs e)
@@ -276,18 +269,18 @@ namespace NoteManager
                         case ObjectType.FolderNode:
                         case ObjectType.RootNode:
                             // Здесь убираем контрол заметки
-                            tsAddFolder.Enabled = true;                           
+                            tsAddFolder.Enabled = true;
                             break;
                         case ObjectType.NoteNode:
                             // Здесь блокируется кнопка добавления объектов и появляется контрол редактора текста
-                            tsAddFolder.Enabled = false;                                                       
+                            tsAddFolder.Enabled = false;
                             break;
                     }
-                    
+
                     // Прокидываем все типы узлов в контрол. Сделано для корректного контроля потока
                     // автосохранения текста в память.
                     ncNote.SetObjectData((ObjectData)tvObjectTree.SelectedNode.Tag);
-                    
+
                     // Доп. проверка: если выбран корневой узел, то его нельзя удалять. Не смог его в тот кейз поместить.
                     if (((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType == ObjectType.RootNode)
                         tsBtnRemoveNode.Enabled = false;
@@ -350,10 +343,7 @@ namespace NoteManager
         {
             // Возникает после изменения измения имени узла
             if (e.Label is not null)
-            {
                 ((ObjectData)e.Node.Tag).ObjectName = e.Label;
-                ActivateSaveDBButton();
-            }
         }
 
         private void OnObjectTreeKeyDown(object sender, KeyEventArgs e)
@@ -384,8 +374,6 @@ namespace NoteManager
             }
         }
 
-        private void ActivateSaveDBButton() => btnSaveToDB.Enabled = true;
-
         private void OnObjectTreeItemDrag(object sender, ItemDragEventArgs e)
         {
             // Если пользователь пытается воткнуть что-то другое - выходим.
@@ -394,7 +382,7 @@ namespace NoteManager
             // Порверяем, что объект данных узла не является корневым узлом, сразу пресекаем
             if ((e.Button == MouseButtons.Left) &&
                (((ObjectData)((TreeNode)e.Item).Tag).ObjectType != ObjectType.RootNode))
-                    DoDragDrop(e.Item, DragDropEffects.Move);
+                DoDragDrop(e.Item, DragDropEffects.Move);
 
         }
 
@@ -415,8 +403,7 @@ namespace NoteManager
                         targetNode.Nodes.Add(draggedNode);
 
                         // Нужно поменять перемещенному узлу родителя
-                        ((ObjectData)draggedNode.Tag).ParentID = ((ObjectData)draggedNode.Parent.Tag).ObjectID;
-                        ActivateSaveDBButton();
+                        ((ObjectData)draggedNode.Tag).ParentID = ((ObjectData)targetNode.Tag).ObjectID;
                     }
                     targetNode.Expand();
                 }

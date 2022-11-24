@@ -191,7 +191,7 @@
             this.btnFontSizeUp.Name = "btnFontSizeUp";
             this.btnFontSizeUp.Size = new System.Drawing.Size(29, 25);
             this.btnFontSizeUp.Text = "Увеличить шрифт";
-            this.btnFontSizeUp.Click += new System.EventHandler(this.FontSizeUp);
+            this.btnFontSizeUp.Click += new System.EventHandler(this.FontSizeUpDown);
             // 
             // btnFontSizeDown
             // 
@@ -201,7 +201,7 @@
             this.btnFontSizeDown.Name = "btnFontSizeDown";
             this.btnFontSizeDown.Size = new System.Drawing.Size(29, 25);
             this.btnFontSizeDown.Text = "Уменьшить шрифт";
-            this.btnFontSizeDown.Click += new System.EventHandler(this.FontSizeDown);
+            this.btnFontSizeDown.Click += new System.EventHandler(this.FontSizeUpDown);
             // 
             // toolStripSeparator1
             // 
@@ -217,7 +217,7 @@
             this.btnBoldFont.Name = "btnBoldFont";
             this.btnBoldFont.Size = new System.Drawing.Size(29, 25);
             this.btnBoldFont.Text = "Полужирный текст";
-            this.btnBoldFont.Click += new System.EventHandler(this.SetBoldOnSelection);
+            this.btnBoldFont.Click += new System.EventHandler(this.SetFontStyle);
             // 
             // btnItalicFont
             // 
@@ -228,7 +228,7 @@
             this.btnItalicFont.Name = "btnItalicFont";
             this.btnItalicFont.Size = new System.Drawing.Size(29, 25);
             this.btnItalicFont.Text = "Курсивный текст";
-            this.btnItalicFont.Click += new System.EventHandler(this.SetItalicOnSelection);
+            this.btnItalicFont.Click += new System.EventHandler(this.SetFontStyle);
             // 
             // btnUnderlineFont
             // 
@@ -239,7 +239,7 @@
             this.btnUnderlineFont.Name = "btnUnderlineFont";
             this.btnUnderlineFont.Size = new System.Drawing.Size(29, 25);
             this.btnUnderlineFont.Text = "Подчёркнутый текст";
-            this.btnUnderlineFont.Click += new System.EventHandler(this.SetUnderlineOnSelection);
+            this.btnUnderlineFont.Click += new System.EventHandler(this.SetFontStyle);
             // 
             // btnStrikeoutFont
             // 
@@ -251,7 +251,7 @@
             this.btnStrikeoutFont.Size = new System.Drawing.Size(29, 25);
             this.btnStrikeoutFont.Text = "Перечёркнутый текст";
             this.btnStrikeoutFont.ToolTipText = "btn";
-            this.btnStrikeoutFont.Click += new System.EventHandler(this.SetStrikeoutOnSelection);
+            this.btnStrikeoutFont.Click += new System.EventHandler(this.SetFontStyle);
             // 
             // toolStripSeparator2
             // 
@@ -267,7 +267,7 @@
             this.btnLeftTextAlign.Name = "btnLeftTextAlign";
             this.btnLeftTextAlign.Size = new System.Drawing.Size(29, 25);
             this.btnLeftTextAlign.Text = "Выровнять по левому краю";
-            this.btnLeftTextAlign.Click += new System.EventHandler(this.SetLeftAlignmentOnSelection);
+            this.btnLeftTextAlign.Click += new System.EventHandler(this.SetAligmentOnSelectedText);
             // 
             // btnCenterTextAlign
             // 
@@ -278,7 +278,7 @@
             this.btnCenterTextAlign.Name = "btnCenterTextAlign";
             this.btnCenterTextAlign.Size = new System.Drawing.Size(29, 25);
             this.btnCenterTextAlign.Text = "Выровнять по центру";
-            this.btnCenterTextAlign.Click += new System.EventHandler(this.SetCenterAlignmentOnSelection);
+            this.btnCenterTextAlign.Click += new System.EventHandler(this.SetAligmentOnSelectedText);
             // 
             // btnRightTextAlign
             // 
@@ -289,7 +289,7 @@
             this.btnRightTextAlign.Name = "btnRightTextAlign";
             this.btnRightTextAlign.Size = new System.Drawing.Size(29, 25);
             this.btnRightTextAlign.Text = "Выровнять по правому краю";
-            this.btnRightTextAlign.Click += new System.EventHandler(this.SetRightAlignmentOnSelection);
+            this.btnRightTextAlign.Click += new System.EventHandler(this.SetAligmentOnSelectedText);
             // 
             // NoteControl
             // 
