@@ -220,7 +220,6 @@
             // btnSaveToDB
             // 
             this.btnSaveToDB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSaveToDB.Enabled = false;
             this.btnSaveToDB.Location = new System.Drawing.Point(583, 3);
             this.btnSaveToDB.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnSaveToDB.Name = "btnSaveToDB";
