@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NoteManager.CommonTypes.Data
+﻿namespace NoteManager.CommonTypes.Data
 {
     internal static class ObjectDataManager
     {

@@ -3,6 +3,8 @@ using NoteManager.CommonTypes.Enums;
 using NoteManager.Database;
 using NoteManager.Properties;
 using NoteManager.CommonTypes.Data.Debug;
+using Microsoft.Toolkit.Uwp.Notifications;
+using NoteManager.CommonTypes.Extensions;
 
 namespace NoteManager
 {
@@ -17,42 +19,38 @@ namespace NoteManager
             CreateMainRootNode();
 
             _databaseManager = new DatabaseManager();
-            _databaseManager.DatabaseActionEvent += ShowActionMessage;
 
             LoadObjectsFromDatabase();
-
 #if DEBUG
             // Вызов консоли для отладки.
             DebugConsole.AllocConsole();
 #endif
         }
 
-        /// <summary>
-        /// Инициирует контрол заметки, подвязывает callback функции, если таковые имеются.
-        /// </summary>
-
-
         private void CreateMainRootNode()
         {
             // Создаем корневой узел, который будет оснновой для всей иерархии.
-            ObjectType nodeType = ObjectType.RootNode;
+            ENodeType nodeType = ENodeType.RootNode;
 
             // Его не нужно добавлять в общий набор объектов. Он будет всегдда неизменным.
             TreeNode node = tvObjectTree.Nodes.Add(CommonTypes.Data.CommonTypes.NodeTypeDesc[(byte)nodeType]);
-            node.SelectedImageIndex = (byte)ObjectType.RootNode;
-            node.StateImageIndex = (byte)ObjectType.RootNode;
-            node.ImageIndex = (byte)ObjectType.RootNode;
+            node.SelectedImageIndex = ENodeType.RootNode.ToInt();
+            node.StateImageIndex = ENodeType.RootNode.ToInt();
+            node.ImageIndex = ENodeType.RootNode.ToInt();
             node.Tag = new ObjectData(-1,
                                       -1,
                                       node.Text,
-                                      ObjectType.RootNode
-                                      );
+                                      ENodeType.RootNode);
         }
 
         private void LoadObjectsFromDatabase()
         {
             _databaseManager.LoadObjectTreeFromDB();
-            // Подгружаем дерево из БД и заполняем программу
+            // Подгружаем дерево из БД и заполняем программу. Сортируем объекты, чтобы не возникало
+            // проблемы, при которой дерево некорректно строится после перемещения узлов перетягиванием.
+            // Объект несортированного списка может попасть в метод добавления в дерево объектов раньше,
+            // чем родительский объект.
+            ObjectDataManager.ObjectDataList.Sort(ObjectDataComparison.CompareObjectDataByParentID);
             foreach (var objectData in ObjectDataManager.ObjectDataList)
             {
                 AddNode(objectData);
@@ -79,7 +77,7 @@ namespace NoteManager
             // Если у узла нет детей, то шлёпаем этот узел и уходим
             if (node.Nodes.Count == 0)
             {
-                ((ObjectData)node.Tag).DataStatus = DataStatus.DataDelete;
+                ((ObjectData)node.Tag).DataStatus = EDataStatus.DataDelete;
                 node.Remove();
                 return;
             }
@@ -87,18 +85,12 @@ namespace NoteManager
             {
                 while (node.Nodes.Count != 0)
                 {
-                    ((ObjectData)node.Tag).DataStatus = DataStatus.DataDelete;
+                    ((ObjectData)node.Tag).DataStatus = EDataStatus.DataDelete;
                     RemoveNode(node.Nodes[0]);
                 }
                 node.Remove();
             }
         }
-
-        /// <summary>
-        /// Отображает на форме статус модификации данных из других потоков.
-        /// </summary>
-        /// <param name="Message">Текст статуса</param>
-        private void ShowActionMessage(string Message) => lbActionStatus.Text = Message;
 
         /// <summary>
         /// Добавление узла из базы данных
@@ -116,8 +108,8 @@ namespace NoteManager
                 node = node.Nodes.Add(objectData.ObjectName);
                 node.Tag = objectData;
                 // Обозачаем выбраннный узел иконкой в зависимости от выбранного типа
-                node.ImageIndex = (byte)objectData.ObjectType;
-                node.SelectedImageIndex = (byte)objectData.ObjectType;
+                node.ImageIndex = objectData.ObjectType.ToInt();
+                node.SelectedImageIndex = objectData.ObjectType.ToInt();
             }
             // Иначе ищем родительский узел и добавляем в него
             else
@@ -133,12 +125,13 @@ namespace NoteManager
                 }
                 else
                 {
-                    tmpNode = tvObjectTree.Nodes.Add(objectData.ObjectName);
+                    tmpNode = tvObjectTree.Nodes[0];
+                    tmpNode = tmpNode.Nodes.Add(objectData.ObjectName);
                     tmpNode.Tag = objectData;
                 }
                 // Обозачаем выбраннный узел иконкой в зависимости от выбранного типа
-                tmpNode.ImageIndex = (byte)objectData.ObjectType;
-                tmpNode.SelectedImageIndex = (byte)objectData.ObjectType;
+                tmpNode.ImageIndex = objectData.ObjectType.ToInt();
+                tmpNode.SelectedImageIndex = objectData.ObjectType.ToInt();
             }
             tvObjectTree.EndUpdate();
         }
@@ -151,7 +144,7 @@ namespace NoteManager
         /// <returns></returns>
         private TreeNode? FindParentNode(TreeNode node, int ParentID)
         {
-            TreeNode? parentNode = null;
+
             // Если в узле не нашли нужное значение, идём в дочерние узлы
             if (((ObjectData)node.Tag).ObjectID != ParentID)
             {
@@ -160,17 +153,16 @@ namespace NoteManager
                     if (((ObjectData)child.Tag).ObjectID != ParentID)
                     {
                         if (child.Nodes.Count != 0)
-                            parentNode = FindParentNode(child, ParentID);
-                        else parentNode = null;
+                            return FindParentNode(child, ParentID);
                     }
-                    else parentNode = child;
+                    else
+                        return child;
                 }
             }
             else
-            {
-                parentNode = node;
-            }
-            return parentNode;
+                return node;
+
+            return null;
         }
 
         /// <summary>
@@ -178,7 +170,7 @@ namespace NoteManager
         /// </summary>
         /// <param name="nodeType"> Тип узла</param>
         /// <param name="dataStatus">Статус данных. В данном случае статус по умолчанию DataAdd(добавление в БД)</param>
-        private void AddNode(ObjectType nodeType, DataStatus dataStatus = DataStatus.DataAdd)
+        private void AddNode(ENodeType nodeType, EDataStatus dataStatus = EDataStatus.DataAdd)
         {
             TreeNode? node;
             tvObjectTree.BeginUpdate();
@@ -186,18 +178,18 @@ namespace NoteManager
             // Для регулирования вложенностей в дереве
             if (tvObjectTree.SelectedNode != null)
             {
-                node = tvObjectTree.SelectedNode.Nodes.Add(CommonTypes.Data.CommonTypes.NodeTypeDesc[(byte)nodeType]);
+                node = tvObjectTree.SelectedNode.Nodes.Add(CommonTypes.Data.CommonTypes.NodeTypeDesc[nodeType.ToInt()]);
             }
             else
             {
                 //  Если узел не выбран, то цепляемся к корневому узлу
                 TreeNode root = tvObjectTree.Nodes[0];
-                node = root.Nodes.Add(CommonTypes.Data.CommonTypes.NodeTypeDesc[(byte)nodeType]);
+                node = root.Nodes.Add(CommonTypes.Data.CommonTypes.NodeTypeDesc[nodeType.ToInt()]);
             }
 
 
             // Пишем наш объект данных в узел
-            if (nodeType == ObjectType.NoteNode)
+            if (nodeType == ENodeType.NoteNode)
             {
                 node.Tag = new ObjectData(ItemIDManager.GetNewItemID(),
                                           node.Parent == null ? -1 : ((ObjectData)node.Parent.Tag).ObjectID,
@@ -224,8 +216,8 @@ namespace NoteManager
             ObjectDataManager.ObjectDataList.Add((ObjectData)node.Tag);
 
             // Обозачаем выбраннный узел иконкой в зависимости от выбранного типа
-            node.ImageIndex = (byte)nodeType;
-            node.SelectedImageIndex = (byte)nodeType;
+            node.ImageIndex = nodeType.ToInt();
+            node.SelectedImageIndex = nodeType.ToInt();
 
             // Выбираем свежесозданный узел
             tvObjectTree.SelectedNode = node;
@@ -235,12 +227,12 @@ namespace NoteManager
 
         private void tsAddFolder_Click(object sender, EventArgs e)
         {
-            AddNode(ObjectType.FolderNode);
+            AddNode(ENodeType.FolderNode);
         }
 
         private void tsAddNote_Click(object sender, EventArgs e)
         {
-            AddNode(ObjectType.NoteNode);
+            AddNode(ENodeType.NoteNode);
         }
 
         private void OnFormLoad(object sender, EventArgs e)
@@ -266,12 +258,12 @@ namespace NoteManager
                 {
                     switch (((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType)
                     {
-                        case ObjectType.FolderNode:
-                        case ObjectType.RootNode:
+                        case ENodeType.FolderNode:
+                        case ENodeType.RootNode:
                             // Здесь убираем контрол заметки
                             tsAddFolder.Enabled = true;
                             break;
-                        case ObjectType.NoteNode:
+                        case ENodeType.NoteNode:
                             // Здесь блокируется кнопка добавления объектов и появляется контрол редактора текста
                             tsAddFolder.Enabled = false;
                             break;
@@ -282,7 +274,7 @@ namespace NoteManager
                     ncNote.SetObjectData((ObjectData)tvObjectTree.SelectedNode.Tag);
 
                     // Доп. проверка: если выбран корневой узел, то его нельзя удалять. Не смог его в тот кейз поместить.
-                    if (((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType == ObjectType.RootNode)
+                    if (((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType == ENodeType.RootNode)
                         tsBtnRemoveNode.Enabled = false;
                 }
             }
@@ -299,7 +291,7 @@ namespace NoteManager
                 if (tvObjectTree.SelectedNode.Tag is not null)
                 {
                     // Заметка - конечный узел, в него нельзя закладывать папки или другие заметки
-                    if (((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType == ObjectType.NoteNode)
+                    if (((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType == ENodeType.NoteNode)
                     {
                         miAddFolder.Enabled = false;
                         miAddNote.Enabled = false;
@@ -323,12 +315,15 @@ namespace NoteManager
         private void OnFormCLosed(object sender, FormClosedEventArgs e)
         {
             ObjectDataManager.ObjectDataList.Clear();
+            ToastNotificationManagerCompat.Uninstall();
         }
 
-        private void SaveToDataBase(object sender, EventArgs e)
+        private async void SaveToDataBase(object sender, EventArgs e)
         {
-            //btnSaveToDB.Enabled = !_databaseManager.SaveToDataBase();
+            btnSaveToDB.Enabled = false;
             _databaseManager.SaveToDataBase();
+            await Task.Delay(5000);
+            btnSaveToDB.Enabled = true;
         }
 
         private void OnObjectTreeMouseDown(object sender, MouseEventArgs e)
@@ -341,9 +336,8 @@ namespace NoteManager
 
         private void OnObjectTreeAfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            // Возникает после изменения измения имени узла
-            if (e.Label is not null)
-                ((ObjectData)e.Node.Tag).ObjectName = e.Label;
+            // Возникает после изменения измения имени узла           
+            ((ObjectData)e.Node.Tag).ObjectName = e.Label;
         }
 
         private void OnObjectTreeKeyDown(object sender, KeyEventArgs e)
@@ -369,8 +363,8 @@ namespace NoteManager
         {
             if (tvObjectTree.SelectedNode is not null)
             {
-                tsAddNote.Enabled = ((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType != ObjectType.NoteNode;
-                tsAddFolder.Enabled = ((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType != ObjectType.NoteNode;
+                tsAddNote.Enabled = ((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType != ENodeType.NoteNode;
+                tsAddFolder.Enabled = ((ObjectData)tvObjectTree.SelectedNode.Tag).ObjectType != ENodeType.NoteNode;
             }
         }
 
@@ -381,7 +375,7 @@ namespace NoteManager
 
             // Порверяем, что объект данных узла не является корневым узлом, сразу пресекаем
             if ((e.Button == MouseButtons.Left) &&
-               (((ObjectData)((TreeNode)e.Item).Tag).ObjectType != ObjectType.RootNode))
+               (((ObjectData)((TreeNode)e.Item).Tag).ObjectType != ENodeType.RootNode))
                 DoDragDrop(e.Item, DragDropEffects.Move);
 
         }
@@ -425,7 +419,7 @@ namespace NoteManager
             {
                 if (targetNode.Equals(tvObjectTree.SelectedNode)) return;
 
-                if ((targetNode.Tag as ObjectData)?.ObjectType == ObjectType.NoteNode)
+                if ((targetNode.Tag as ObjectData)?.ObjectType == ENodeType.NoteNode)
                 {
                     e.Effect = DragDropEffects.None;
                     return;

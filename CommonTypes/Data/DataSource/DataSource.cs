@@ -6,7 +6,7 @@ namespace NoteManager.CommonTypes.Data
     {
         private int _sourceID = -1;
         private string _sourceName = "";
-        private NoteSourceType _noteSourceType = NoteSourceType.FromYoutube;
+        private ENoteSourceType _noteSourceType = ENoteSourceType.FromYoutube;
         private string _description = "";
         private MemoryStream? _data = null;
 
@@ -32,7 +32,7 @@ namespace NoteManager.CommonTypes.Data
         /// Источник данных, на основе которых формируется заметка:
         /// книга в формате PDF или ссылка на Youtube видео.
         /// </summary>
-        public NoteSourceType NoteSourceType
+        public ENoteSourceType NoteSourceType
         {
             get => _noteSourceType;
             set => _noteSourceType = value;
@@ -59,7 +59,7 @@ namespace NoteManager.CommonTypes.Data
 
 
 
-        public DataSource(int sourceID, string sourceName, NoteSourceType noteSourceType, string description)
+        public DataSource(int sourceID, string sourceName, ENoteSourceType noteSourceType, string description)
         {
             _sourceID = sourceID;
             _sourceName = sourceName;

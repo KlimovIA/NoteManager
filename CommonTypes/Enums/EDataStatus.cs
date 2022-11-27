@@ -3,7 +3,7 @@
     /// <summary>
     /// Статус данных.
     /// </summary>
-    public enum DataStatus: byte
+    public enum EDataStatus: byte
     {
         /// <summary>
         /// Данные без изменений. Этот статус приобретают те объекты, которые были
