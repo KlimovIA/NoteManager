@@ -1,7 +1,9 @@
-﻿namespace NoteManager.CommonTypes.Enums
+﻿using System.Reflection.Metadata.Ecma335;
+
+namespace NoteManager.CommonTypes.Enums
 {
     
-    public enum ObjectType: byte
+    public enum ENodeType: byte
     { 
         /// <summary>
         /// Тип - папка, используется для хранения таких же папок и узлов.

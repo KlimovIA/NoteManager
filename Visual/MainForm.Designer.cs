@@ -44,7 +44,6 @@
             this.pnlMainContainer = new System.Windows.Forms.Panel();
             this.ncNote = new NoteManager.Visual.NoteControl();
             this.pnlApplyChanges = new System.Windows.Forms.Panel();
-            this.lbActionStatus = new System.Windows.Forms.Label();
             this.btnSaveToDB = new System.Windows.Forms.Button();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.pnlToolStripContainer = new System.Windows.Forms.Panel();
@@ -200,7 +199,6 @@
             // 
             this.pnlApplyChanges.BackColor = System.Drawing.SystemColors.Control;
             this.pnlApplyChanges.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlApplyChanges.Controls.Add(this.lbActionStatus);
             this.pnlApplyChanges.Controls.Add(this.btnSaveToDB);
             this.pnlApplyChanges.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlApplyChanges.Location = new System.Drawing.Point(0, 671);
@@ -208,14 +206,6 @@
             this.pnlApplyChanges.Name = "pnlApplyChanges";
             this.pnlApplyChanges.Size = new System.Drawing.Size(724, 39);
             this.pnlApplyChanges.TabIndex = 0;
-            // 
-            // lbActionStatus
-            // 
-            this.lbActionStatus.AutoSize = true;
-            this.lbActionStatus.Location = new System.Drawing.Point(6, 8);
-            this.lbActionStatus.Name = "lbActionStatus";
-            this.lbActionStatus.Size = new System.Drawing.Size(0, 20);
-            this.lbActionStatus.TabIndex = 1;
             // 
             // btnSaveToDB
             // 
@@ -275,7 +265,6 @@
             this.tsFunctions.PerformLayout();
             this.pnlMainContainer.ResumeLayout(false);
             this.pnlApplyChanges.ResumeLayout(false);
-            this.pnlApplyChanges.PerformLayout();
             this.pnlToolStripContainer.ResumeLayout(false);
             this.pnlToolStripContainer.PerformLayout();
             this.ResumeLayout(false);
@@ -298,7 +287,6 @@
         private ToolStripMenuItem miDeleteNode;
         private Panel pnlApplyChanges;
         private Button btnSaveToDB;
-        private Label lbActionStatus;
         private Panel pnlToolStripContainer;
         private Visual.NoteControl ncNote;
         private Splitter splitter1;

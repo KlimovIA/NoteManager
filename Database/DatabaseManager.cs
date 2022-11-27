@@ -10,32 +10,9 @@ namespace NoteManager.Database
 {
     internal class DatabaseManager
     {
-        // Пока не нашел метода добычи данных по названию поля в БД
-        private enum NodesTableFields
-        {
-            ItemID,
-            ParentItemID,
-            ObjectName,
-            ObjectTypeID,
-            SourceID,
-            NoteText
-        }
-
-        private enum DataSourceTableFields
-        {
-            ID,
-            SourceName,
-            SourceType,
-            SourceDescription,
-            SourceData
-        }
-
-        public delegate void DatabaseActionMessageHandler(string Message);
-        public event DatabaseActionMessageHandler? DatabaseActionEvent;
-
         private readonly string _dataSourceConnectionString = "Data Source = Database.db3";
         private SqliteConnection _connection;
-        private SqliteTransaction _transaction;
+        private SqliteTransaction? _transaction;
         public DatabaseManager()
         {
             _connection = new SqliteConnection(_dataSourceConnectionString);
@@ -49,22 +26,22 @@ namespace NoteManager.Database
                     {
                         // Создаём таблицу, хранящую узлы в нужном порядке и их объекты
                         command.CommandText = @"CREATE TABLE Nodes(                       
-                        ItemID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                        ParentItemID INTEGER NOT NULL,
-                        ObjectName TEXT NOT NULL,
-                        ObjectTypeID INTEGER NOT NULL,
-                        SourceID INTEGER NOT NULL,
-                        NoteText BLOB)";
+                                                                   ItemID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                                                                   ParentItemID INTEGER NOT NULL,
+                                                                   ObjectName TEXT NOT NULL,
+                                                                   ObjectTypeID INTEGER NOT NULL,
+                                                                   SourceID INTEGER NOT NULL,
+                                                                   NoteText BLOB)";
                         command.CommandType = CommandType.Text;
                         command.ExecuteNonQuery();
 
                         // Создаём таблицу, которая будет хранить  источники данных в бинарном виде (PDF или ссылка на youtube) 
                         command.CommandText = @"CREATE TABLE DataSource(
-                        ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                        SourceName TEXT NOT NULL,
-                        SourceType INTEGER,
-                        SourceDescription TEXT,
-                        SourceData BLOB)";
+                                                                        ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                                                                        SourceName TEXT NOT NULL,
+                                                                        SourceType INTEGER,
+                                                                        SourceDescription TEXT,
+                                                                        SourceData BLOB)";
                         command.CommandType = CommandType.Text;
                         command.ExecuteNonQuery();
                     }
@@ -97,14 +74,14 @@ namespace NoteManager.Database
                                 ///    Имя и ссылка на родителя. Плюс его идетификатор.
                                 /// 2. Если объект - заметка, то параметров берется по максимуму.
 
-                                ObjectType objectType = (ObjectType)reader.GetFieldValue<int>((int)NodesTableFields.ObjectTypeID);
+                                ENodeType objectType = (ENodeType)reader.GetFieldValue<int>("ObjectTypeID");
 
-                                string objectName = reader.GetFieldValue<string>((int)NodesTableFields.ObjectName);
+                                string objectName = reader.GetFieldValue<string>("ObjectName");
 
-                                int objectID = reader.GetFieldValue<int>((int)NodesTableFields.ItemID),
-                                    parentObjectID = reader.GetFieldValue<int>((int)NodesTableFields.ParentItemID);
+                                int objectID = reader.GetFieldValue<int>("ItemID"),
+                                    parentObjectID = reader.GetFieldValue<int>("ParentItemID");
 
-                                if (objectType == ObjectType.FolderNode)
+                                if (objectType == ENodeType.FolderNode)
                                 {
                                     ObjectDataManager.ObjectDataList.Add(new ObjectData(objectID,
                                                                                         parentObjectID,
@@ -113,17 +90,17 @@ namespace NoteManager.Database
                                 }
                                 else
                                 {
-                                    int sourceID = reader.GetFieldValue<int>((int)NodesTableFields.SourceID);
+                                    int sourceID = reader.GetFieldValue<int>("SourceID");
                                     // Сюда докидываем недостающие поля для заметки
                                     ObjectDataManager.ObjectDataList.Add(new ObjectData(objectID,
                                                                                         parentObjectID,
                                                                                         objectName,
                                                                                         objectType,
                                                                                         sourceID,
-                                                                                        new MemoryStream(reader.GetFieldValue<byte[]>((int)NodesTableFields.NoteText))));
+                                                                                        new MemoryStream(reader.GetFieldValue<byte[]>("NoteText"))));
                                 }
                                 // Добавляем в хранилище ID номер из базы
-                                ItemIDManager.AddItemID(reader.GetFieldValue<int>((int)NodesTableFields.ItemID));
+                                ItemIDManager.AddItemID(reader.GetFieldValue<int>("ItemID"));
                             }
                         }
                     }
@@ -145,25 +122,25 @@ namespace NoteManager.Database
                         {
                             switch (objData.DataStatus)
                             {
-                                case DataStatus.DataAdd:
+                                case EDataStatus.DataAdd:
                                     AddNodeToDB(objData);
                                     break;
 
-                                case DataStatus.DataUpdate:
+                                case EDataStatus.DataUpdate:
                                     UpdateNodeInDB(objData);
                                     break;
 
-                                case DataStatus.DataDelete:
+                                case EDataStatus.DataDelete:
                                     DeleteNodeFromDB(objData);
                                     break;
 
-                                case DataStatus.DataNoneChange:
+                                case EDataStatus.DataNoneChange:
                                     break;
                             };
                         }
 
                         // Пробежались по объектам, теперь будем выбрасывать все объекты, что были помечены на удаление
-                        var RemovedDataObjects = ObjectDataManager.ObjectDataList.Where(x => x.DataStatus == DataStatus.DataDelete);
+                        var RemovedDataObjects = ObjectDataManager.ObjectDataList.Where(x => x.DataStatus == EDataStatus.DataDelete);
 
                         // Удаляем объект из списка объектов, чтобы сборщик мусора его выкинул из памяти.                   
                         while (RemovedDataObjects.Count() > 0)
@@ -174,12 +151,11 @@ namespace NoteManager.Database
 #if DEBUG
                         Logger.WriteLogMessage(TypeDescriptor.GetClassName(this), e.Message);
 #endif
-                        MessageBox.Show(Constants.DatabaseRequestError, Constants.ExecutionError);
-                        RaiseDatabaseActionEvent(Constants.DataModificationNotDone);
+                        ActionNotification.ShowActionNotification(Constants.DataModificationNotDone, ActionNotification.NotificationResultType.ResultError);
                         _transaction.Rollback();
                         return false;
                     }
-                    RaiseDatabaseActionEvent(Constants.DataModificationSuccess);
+                    ActionNotification.ShowActionNotification(Constants.DataModificationSuccess, ActionNotification.NotificationResultType.ResultOK);
                     _transaction.Commit();
                     return true;
                 }
@@ -203,26 +179,26 @@ namespace NoteManager.Database
             string objectName = objData.ObjectName;
             int objectType = (int)objData.ObjectType;
             int sourceID = objData.SourceID;
-            byte[] noteText = objData.Note?.ToArray();
+            byte[]? noteText = objData.Note?.ToArray();
 
             using (SqliteCommand command = new SqliteCommand(null, _connection, _transaction))
             {
                 // Добавляем объект в БД
-                command.CommandText = @"INSERT INTO Nodes (ItemID, ParentItemID, ObjectName, ObjectTypeID, SourceID, NoteText) 
-                                            VALUES (@itemID, @parentObjectID, @objectName, @objectTypeID, @sourceID, @noteText)";
+                command.CommandText = @"INSERT INTO Nodes (ItemID,ParentItemID, ObjectName, ObjectTypeID, SourceID, NoteText) 
+                                                   VALUES (@itemID, @parentObjectID, @objectName, @objectTypeID, @sourceID, @noteText)";
 
                 command.Parameters.Add(new SqliteParameter("@itemID", objectID));
                 command.Parameters.Add(new SqliteParameter("@parentObjectID", parentObjectID));
                 command.Parameters.Add(new SqliteParameter("@objectName", objectName));
                 command.Parameters.Add(new SqliteParameter("@objectTypeID", objectType));
-                command.Parameters.Add(new SqliteParameter("@sourceID", sourceID));              
-                command.Parameters.Add(new SqliteParameter("@noteText", noteText is null? "NULL": noteText));
+                command.Parameters.Add(new SqliteParameter("@sourceID", sourceID));
+                command.Parameters.Add(new SqliteParameter("@noteText", noteText is null ? "NULL" : noteText));
 
                 command.CommandType = CommandType.Text;
                 command.ExecuteNonQuery();
             }
             // Помечаем, что работа с этим объектом завершена и больше повторять эти действия не надо будет.
-            objData.DataStatus = DataStatus.DataNoneChange;
+            objData.DataStatus = EDataStatus.DataNoneChange;
         }
 
         private void DeleteNodeFromDB(ObjectData objData)
@@ -248,7 +224,7 @@ namespace NoteManager.Database
             int parentID = objData.ParentID;
             int sourceID = objData.SourceID;
             string objectName = objData.ObjectName;
-            byte[] noteText = objData.Note?.ToArray();
+            byte[]? noteText = objData.Note?.ToArray();
 
             using (SqliteCommand command = new SqliteCommand(null, _connection, _transaction))
             {
@@ -270,8 +246,7 @@ namespace NoteManager.Database
                 command.ExecuteNonQuery();
             }
             // Помечаем, что работа с этим объектом завершена и больше повторять эти действия не надо будет.
-            objData.DataStatus = DataStatus.DataNoneChange;
+            objData.DataStatus = EDataStatus.DataNoneChange;
         }
-        private void RaiseDatabaseActionEvent(string Message) => DatabaseActionEvent?.Invoke(Message);
     }
 }

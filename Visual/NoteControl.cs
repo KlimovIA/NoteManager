@@ -1,5 +1,4 @@
 ﻿using NoteManager.CommonTypes.Data;
-using NoteManager.CommonTypes.Data.Debug;
 using System.Text;
 
 namespace NoteManager.Visual
@@ -8,7 +7,7 @@ namespace NoteManager.Visual
     {
         private ObjectData? _objectData;
         private static ManualResetEvent _threadStopper = new ManualResetEvent(true);
-        private Thread _textAutoSaveThread;
+        private Thread? _textAutoSaveThread;
         public NoteControl()
         {
             InitializeComponent();
@@ -26,7 +25,7 @@ namespace NoteManager.Visual
 
         public void SetObjectData(ObjectData objectData)
         {
-            if (objectData.ObjectType == CommonTypes.Enums.ObjectType.NoteNode)
+            if (objectData.ObjectType == CommonTypes.Enums.ENodeType.NoteNode)
             {
                 // Стопим поток, чтобы переопределить объект, в который будет сохраняться текст.
                 Visible = true;
@@ -61,7 +60,7 @@ namespace NoteManager.Visual
         private void UpdateNote()
         {
             redtNote.Clear();
-            if (_objectData.Note.Capacity > 0)
+            if (_objectData?.Note?.Capacity > 0)
             {
                 _objectData.Note.Position = 0;
                 redtNote.LoadFile(_objectData.Note, RichTextBoxStreamType.RichText);
@@ -86,17 +85,16 @@ namespace NoteManager.Visual
             if (_objectData is not null)
             {
                 if (_objectData.Note is not null)
-                {
-                    DebugConsole.WriteLogMessage("Текст сохранен!");
-                    _objectData?.Note?.Dispose();
+                {                   
+                    _objectData.Note.Dispose();
                     _objectData.Note = new MemoryStream();
                     // Сохраняем содержимое richEdit в память объекта данных
                     redtNote.SaveFile(_objectData.Note, RichTextBoxStreamType.RichText);
 
                     // Отмечаем, что данные обновились, и при сохранении в БД это нужно учитывать.          
                     // Но в случае, если узел только создан без сохранения в БД, то статус не меняем.
-                    if (_objectData.DataStatus != CommonTypes.Enums.DataStatus.DataAdd)
-                        _objectData.DataStatus = CommonTypes.Enums.DataStatus.DataUpdate;
+                    if (_objectData.DataStatus != CommonTypes.Enums.EDataStatus.DataAdd)
+                        _objectData.DataStatus = CommonTypes.Enums.EDataStatus.DataUpdate;
                 }
             }
         }

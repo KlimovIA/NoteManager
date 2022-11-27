@@ -1,7 +1,7 @@
 ﻿namespace NoteManager.CommonTypes.Enums
 {
     
-    public enum NoteSourceType: byte
+    public enum ENoteSourceType: byte
     {
         /// <summary>
         /// Источник данных - документ PDF.

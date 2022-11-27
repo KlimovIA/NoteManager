@@ -1,6 +1,5 @@
 ﻿using NoteManager.CommonTypes.Enums;
 
-
 namespace NoteManager.CommonTypes.Data
 {
 
@@ -9,11 +8,11 @@ namespace NoteManager.CommonTypes.Data
         private int _parentID;
         private int _objectID;
         private string _objectName;
-        private readonly ObjectType _objectType;
+        private readonly ENodeType _objectType;
         private int _dataSourceID;
         private DataSource? _dataSource;
         private MemoryStream? _noteText;
-        private DataStatus _dataStatus;
+        private EDataStatus _dataStatus;
 
         /// <summary>
         /// ID узла. Применяется для взаимосвязи в дереве и для использования в БД.
@@ -30,7 +29,12 @@ namespace NoteManager.CommonTypes.Data
         public int ParentID
         {
             get => _parentID;
-            set => _parentID = value;
+            set
+            { 
+                _parentID = value;
+                if (_dataStatus != EDataStatus.DataAdd)
+                    _dataStatus = EDataStatus.DataUpdate;
+            }
         }
 
         /// <summary>
@@ -39,13 +43,19 @@ namespace NoteManager.CommonTypes.Data
         public string ObjectName
         {
             get => _objectName;
-            set => _objectName = value;
+            set
+            {
+                if (value is null) return;
+                _objectName = value;
+                if (_dataStatus != EDataStatus.DataAdd)
+                    _dataStatus = EDataStatus.DataUpdate;                
+            }
         }
 
         /// <summary>
         /// Тип объекта: папка или объект заметки.
         /// </summary>
-        public ObjectType ObjectType
+        public ENodeType ObjectType
         {
             get => _objectType;
         }
@@ -56,7 +66,12 @@ namespace NoteManager.CommonTypes.Data
         public int SourceID
         {
             get => _dataSourceID;
-            set => _dataSourceID = value;
+            set 
+            { 
+                _dataSourceID = value;
+                if (_dataStatus != EDataStatus.DataAdd)
+                    _dataStatus = EDataStatus.DataUpdate;
+            }
         }
 
         /// <summary>
@@ -65,13 +80,18 @@ namespace NoteManager.CommonTypes.Data
         public MemoryStream? Note
         {
             get => _noteText;
-            set => _noteText = value;
+            set 
+            {
+                _noteText = value;
+                if (_dataStatus != EDataStatus.DataAdd)
+                    _dataStatus = EDataStatus.DataUpdate;
+            }
         }
 
         /// <summary>
         /// Статус измения данных объекта.
         /// </summary>
-        public DataStatus DataStatus
+        public EDataStatus DataStatus
         {
             get => _dataStatus;
             set => _dataStatus = value;
@@ -86,7 +106,7 @@ namespace NoteManager.CommonTypes.Data
             set => _dataSource = value;
         }
 
-        public ObjectData(int objectID, int parentID, string objectName, ObjectType objectType, int sourceID, MemoryStream? note)
+        public ObjectData(int objectID, int parentID, string objectName, ENodeType objectType, int sourceID, MemoryStream? note)
         {
             _objectID = objectID;
             _parentID = parentID;
@@ -94,16 +114,16 @@ namespace NoteManager.CommonTypes.Data
             _objectType = objectType;
             _dataSourceID = sourceID;
             _noteText = note;
-            _dataStatus = DataStatus.DataNoneChange;
+            _dataStatus = EDataStatus.DataNoneChange;
         }
 
-        public ObjectData(int objectID, int parentID, string objectName, ObjectType objectType)
+        public ObjectData(int objectID, int parentID, string objectName, ENodeType objectType)
         {
             _objectID = objectID;
             _parentID = parentID;
             _objectName = objectName;
             _objectType = objectType;
-            _dataStatus = DataStatus.DataNoneChange;
+            _dataStatus = EDataStatus.DataNoneChange;
             _dataSourceID = -1;
             _noteText = null;
         }
