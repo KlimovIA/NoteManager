@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
 
 namespace NoteManager.CommonTypes.Data.Debug
 {
@@ -17,9 +12,9 @@ namespace NoteManager.CommonTypes.Data.Debug
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool FreeConsole();
 
-        public static void WriteLogMessage(string message)
+        public static void WriteLogMessage(string? message)
         { 
-            Console.WriteLine($"[{DateTime.Now}] >> {message}");
+            Console.WriteLine($"[{DateTime.Now}] >> {message?? " "}");
         }
     }
 }

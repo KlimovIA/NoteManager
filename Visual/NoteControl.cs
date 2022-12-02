@@ -1,4 +1,5 @@
 ﻿using NoteManager.CommonTypes.Data;
+using NoteManager.CommonTypes.Data.Debug;
 using System.Text;
 
 namespace NoteManager.Visual
@@ -6,11 +7,29 @@ namespace NoteManager.Visual
     public partial class NoteControl : UserControl
     {
         private ObjectData? _objectData;
-        private static ManualResetEvent _threadStopper = new ManualResetEvent(true);
-        private Thread? _textAutoSaveThread;
+        private bool _textAutoSaveEnabled;
+
         public NoteControl()
         {
             InitializeComponent();
+        }
+
+        public void TerminateAutosaveThread()
+        {
+            SetAutosaveEnabled(false);
+            // Найти возможность безопасно схлопнуть программу
+        }
+
+        private void SetAutosaveEnabled(bool enabled)
+        {
+            _textAutoSaveEnabled = enabled;
+            if (_textAutoSaveEnabled)
+                StartAutosaveThread();
+        }
+
+        private void StartAutosaveThread()
+        {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(SaveText));           
         }
 
         private void NoteControlLoad(object sender, EventArgs e)
@@ -18,9 +37,7 @@ namespace NoteManager.Visual
             // Здесь формируем набор в комбобоксе шрифтов и размеров шрифтов
             InitFonts();
             InitFontSizes();
-
-            _textAutoSaveThread = new Thread(new ThreadStart(SaveText));
-            _textAutoSaveThread.Start();           
+            SetAutosaveEnabled(false);
         }
 
         public void SetObjectData(ObjectData objectData)
@@ -29,29 +46,26 @@ namespace NoteManager.Visual
             {
                 // Стопим поток, чтобы переопределить объект, в который будет сохраняться текст.
                 Visible = true;
-                _threadStopper.Reset();
+                SetAutosaveEnabled(false);
 
                 _objectData = objectData;
                 UpdateNote();
 
                 // Возвращаем поток к работе               
-                _threadStopper.Set();
+                SetAutosaveEnabled(true);
             }
             else
             {
-                Visible = false;             
-                _threadStopper.Reset();
+                Visible = false;
+                SetAutosaveEnabled(false);
             }
         }
 
-        private void SaveText()
+        private void SaveText(object stateInfo)
         {
             const int AUTOSAVE_TIMEOUT = 1000;
-            while (true)
-            {
-                // Поток усыпляется по команде, по команде и просыпается, меняется лишь объект, в который
-                // будет записываться текст.
-                _threadStopper.WaitOne();
+            while (_textAutoSaveEnabled)
+            {               
                 Invoke(new Action(SaveTextInObjectData));
                 Thread.Sleep(AUTOSAVE_TIMEOUT);
             }           
@@ -85,7 +99,7 @@ namespace NoteManager.Visual
             if (_objectData is not null)
             {
                 if (_objectData.Note is not null)
-                {                   
+                {
                     _objectData.Note.Dispose();
                     _objectData.Note = new MemoryStream();
                     // Сохраняем содержимое richEdit в память объекта данных
@@ -153,7 +167,7 @@ namespace NoteManager.Visual
                                               redtNote.SelectionFont.Style);
             UpdateTextSettings(null, new EventArgs());
         }
-           
+
         private void UpdateTextSettings(object? sender, EventArgs e)
         {
             // Обновляем состояние панели редактора текста
@@ -176,9 +190,9 @@ namespace NoteManager.Visual
 
         private void SetAligmentOnSelectedText(object sender, EventArgs e)
         {
-            if (sender == btnLeftTextAlign)    redtNote.SelectionAlignment = HorizontalAlignment.Left;
-            if (sender == btnCenterTextAlign)  redtNote.SelectionAlignment = HorizontalAlignment.Center;
-            if (sender == btnRightTextAlign)   redtNote.SelectionAlignment = HorizontalAlignment.Right;
+            if (sender == btnLeftTextAlign) redtNote.SelectionAlignment = HorizontalAlignment.Left;
+            if (sender == btnCenterTextAlign) redtNote.SelectionAlignment = HorizontalAlignment.Center;
+            if (sender == btnRightTextAlign) redtNote.SelectionAlignment = HorizontalAlignment.Right;
 
             UpdateTextSettings(null, new EventArgs());
         }
@@ -188,8 +202,8 @@ namespace NoteManager.Visual
             string fontName = cbbFontNames.SelectedItem.ToString() ?? "";
             FontStyle fontStyle = FontStyle.Regular;
 
-            if (sender == btnBoldFont)      fontStyle = FontStyle.Bold;
-            if (sender == btnItalicFont)    fontStyle = FontStyle.Italic;
+            if (sender == btnBoldFont) fontStyle = FontStyle.Bold;
+            if (sender == btnItalicFont) fontStyle = FontStyle.Italic;
             if (sender == btnStrikeoutFont) fontStyle = FontStyle.Strikeout;
             if (sender == btnUnderlineFont) fontStyle = FontStyle.Underline;
 

@@ -5,6 +5,7 @@ using NoteManager.Properties;
 using NoteManager.CommonTypes.Data.Debug;
 using Microsoft.Toolkit.Uwp.Notifications;
 using NoteManager.CommonTypes.Extensions;
+using NoteManager.Visual;
 
 namespace NoteManager
 {
@@ -316,6 +317,7 @@ namespace NoteManager
         {
             ObjectDataManager.ObjectDataList.Clear();
             ToastNotificationManagerCompat.Uninstall();
+            ncNote.TerminateAutosaveThread();
         }
 
         private async void SaveToDataBase(object sender, EventArgs e)
