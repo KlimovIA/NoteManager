@@ -333,7 +333,10 @@ namespace NoteManager
             // Активация узла дерева по нажатию любой кнопки мыши. Но дополнительно для вызова контекстного меню.
             tvObjectTree.SelectedNode = tvObjectTree.GetNodeAt(new Point(e.X, e.Y));
             if (tvObjectTree.SelectedNode is null)
+            {
+                ncNote.SetObjectData(null);
                 tsBtnRemoveNode.Enabled = false;
+            }
         }
 
         private void OnObjectTreeAfterLabelEdit(object sender, NodeLabelEditEventArgs e)
