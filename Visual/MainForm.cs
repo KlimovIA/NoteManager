@@ -13,6 +13,7 @@ namespace NoteManager
     {
         private ImageList? _imgTreeView;
         private readonly DatabaseManager _databaseManager;
+        private bool _saveNotesOnCloseApplication = false;
         public MainForm()
         {
             InitializeComponent();
@@ -313,13 +314,6 @@ namespace NoteManager
                 RemoveNode(tvObjectTree.SelectedNode);
         }
 
-        private void OnFormCLosed(object sender, FormClosedEventArgs e)
-        {
-            ObjectDataManager.ObjectDataList.Clear();
-            ToastNotificationManagerCompat.Uninstall();
-            ncNote.TerminateAutosaveThread();
-        }
-
         private async void SaveToDataBase(object sender, EventArgs e)
         {
             btnSaveToDB.Enabled = false;
@@ -439,6 +433,19 @@ namespace NoteManager
         private void OnFormShow(object sender, EventArgs e)
         {
             this.Text += $" версии {Application.ProductVersion}";
+        }
+
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        {
+            ncNote.SetObjectData(null);
+            if (_saveNotesOnCloseApplication)
+                new DatabaseManager().SaveToDataBase();
+        }
+
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            ObjectDataManager.ObjectDataList.Clear();
+            ToastNotificationManagerCompat.Uninstall();           
         }
     }
 }

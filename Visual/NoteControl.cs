@@ -7,31 +7,10 @@ namespace NoteManager.Visual
     public partial class NoteControl : UserControl
     {
         private ObjectData? _objectData;
-        private bool _textAutoSaveEnabled;
-        private Task? _autoSaveTask;
+        
         public NoteControl()
         {
             InitializeComponent();
-        }
-
-        public void TerminateAutosaveThread()
-        {
-            SetObjectData(null);
-        }
-
-        private void SetAutosaveEnabled(bool enabled)
-        {
-            _textAutoSaveEnabled = enabled;
-            if (_textAutoSaveEnabled)
-                StartAutosaveTask();
-        }
-
-        private void StartAutosaveTask()
-        {
-            if (_textAutoSaveEnabled)
-            {
-                _autoSaveTask = Task.Factory.StartNew(new Action(SaveText));
-            }
         }
 
         private void NoteControlLoad(object sender, EventArgs e)
@@ -39,38 +18,34 @@ namespace NoteManager.Visual
             // Здесь формируем набор в комбобоксе шрифтов и размеров шрифтов
             InitFonts();
             InitFontSizes();
-            SetAutosaveEnabled(false);
         }
 
         public void SetObjectData(ObjectData? objectData)
         {
+            // Если сменяемый объект является заметкой, то его необходимо сохранить в память
+            if (_objectData?.ObjectType == CommonTypes.Enums.ENodeType.NoteNode)
+            {
+                SaveText();
+            }
+            
             if (objectData?.ObjectType == CommonTypes.Enums.ENodeType.NoteNode)
             {
-                // Стопим поток, чтобы переопределить объект, в который будет сохраняться текст.
                 Visible = true;
-                SetAutosaveEnabled(false);
 
                 _objectData = objectData;
                 UpdateNote();
 
-                // Возвращаем поток к работе               
-                SetAutosaveEnabled(true);
             }
             else
             {
                 Visible = false;
-                SetAutosaveEnabled(false);
+                _objectData = null;
             }
         }
 
         private void SaveText()
         {
-            const int AUTOSAVE_TIMEOUT = 1000;
-            while (_textAutoSaveEnabled)
-            {               
-                Invoke(new Action(SaveTextInObjectData));
-                Thread.Sleep(AUTOSAVE_TIMEOUT);
-            }
+            Invoke(new Action(SaveTextInObjectData));
         }
 
         private void UpdateNote()
