@@ -32,7 +32,7 @@ namespace NoteManager.CommonTypes.Data
             set
             { 
                 _parentID = value;
-                if (_dataStatus != EDataStatus.DataAdd)
+                if (_dataStatus != EDataStatus.DataAdd && _dataStatus != EDataStatus.DataDelete)
                     _dataStatus = EDataStatus.DataUpdate;
             }
         }
@@ -47,7 +47,7 @@ namespace NoteManager.CommonTypes.Data
             {
                 if (value is null) return;
                 _objectName = value;
-                if (_dataStatus != EDataStatus.DataAdd)
+                if (_dataStatus != EDataStatus.DataAdd && _dataStatus != EDataStatus.DataDelete)
                     _dataStatus = EDataStatus.DataUpdate;                
             }
         }
@@ -69,7 +69,7 @@ namespace NoteManager.CommonTypes.Data
             set 
             { 
                 _dataSourceID = value;
-                if (_dataStatus != EDataStatus.DataAdd)
+                if (_dataStatus != EDataStatus.DataAdd && _dataStatus != EDataStatus.DataDelete)
                     _dataStatus = EDataStatus.DataUpdate;
             }
         }
@@ -83,7 +83,7 @@ namespace NoteManager.CommonTypes.Data
             set 
             {
                 _noteText = value;
-                if (_dataStatus != EDataStatus.DataAdd)
+                if (_dataStatus != EDataStatus.DataAdd && _dataStatus != EDataStatus.DataDelete)
                     _dataStatus = EDataStatus.DataUpdate;
             }
         }

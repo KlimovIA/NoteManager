@@ -256,7 +256,8 @@
             this.Name = "MainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Менеждер заметок";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormCLosed);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
             this.Load += new System.EventHandler(this.OnFormLoad);
             this.Shown += new System.EventHandler(this.OnFormShow);
             this.pnlObjectTreeContainer.ResumeLayout(false);

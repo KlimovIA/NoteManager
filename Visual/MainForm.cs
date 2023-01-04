@@ -5,20 +5,20 @@ using NoteManager.Properties;
 using NoteManager.CommonTypes.Data.Debug;
 using Microsoft.Toolkit.Uwp.Notifications;
 using NoteManager.CommonTypes.Extensions;
+using NoteManager.Visual;
 
 namespace NoteManager
 {
     public partial class MainForm : Form
     {
         private ImageList? _imgTreeView;
-        private readonly DatabaseManager _databaseManager;
+
+        private bool _saveNotesOnCloseApplication = false;
         public MainForm()
         {
             InitializeComponent();
             InitImageList();
             CreateMainRootNode();
-
-            _databaseManager = new DatabaseManager();
 
             LoadObjectsFromDatabase();
 #if DEBUG
@@ -45,7 +45,7 @@ namespace NoteManager
 
         private void LoadObjectsFromDatabase()
         {
-            _databaseManager.LoadObjectTreeFromDB();
+            DatabaseManager.LoadObjectTreeFromDB();
             // Подгружаем дерево из БД и заполняем программу. Сортируем объекты, чтобы не возникало
             // проблемы, при которой дерево некорректно строится после перемещения узлов перетягиванием.
             // Объект несортированного списка может попасть в метод добавления в дерево объектов раньше,
@@ -144,7 +144,7 @@ namespace NoteManager
         /// <returns></returns>
         private TreeNode? FindParentNode(TreeNode node, int ParentID)
         {
-
+            TreeNode? tmpNode;
             // Если в узле не нашли нужное значение, идём в дочерние узлы
             if (((ObjectData)node.Tag).ObjectID != ParentID)
             {
@@ -153,7 +153,11 @@ namespace NoteManager
                     if (((ObjectData)child.Tag).ObjectID != ParentID)
                     {
                         if (child.Nodes.Count != 0)
-                            return FindParentNode(child, ParentID);
+                        {
+                            tmpNode = FindParentNode(child, ParentID);
+                            if (tmpNode == null) continue;
+                            else return tmpNode;
+                        }
                     }
                     else
                         return child;
@@ -312,16 +316,10 @@ namespace NoteManager
                 RemoveNode(tvObjectTree.SelectedNode);
         }
 
-        private void OnFormCLosed(object sender, FormClosedEventArgs e)
-        {
-            ObjectDataManager.ObjectDataList.Clear();
-            ToastNotificationManagerCompat.Uninstall();
-        }
-
         private async void SaveToDataBase(object sender, EventArgs e)
         {
             btnSaveToDB.Enabled = false;
-            _databaseManager.SaveToDataBase();
+            DatabaseManager.SaveToDataBase();
             await Task.Delay(5000);
             btnSaveToDB.Enabled = true;
         }
@@ -331,7 +329,10 @@ namespace NoteManager
             // Активация узла дерева по нажатию любой кнопки мыши. Но дополнительно для вызова контекстного меню.
             tvObjectTree.SelectedNode = tvObjectTree.GetNodeAt(new Point(e.X, e.Y));
             if (tvObjectTree.SelectedNode is null)
+            {
+                ncNote.SetObjectData(null);
                 tsBtnRemoveNode.Enabled = false;
+            }
         }
 
         private void OnObjectTreeAfterLabelEdit(object sender, NodeLabelEditEventArgs e)
@@ -348,9 +349,15 @@ namespace NoteManager
 
             // Удаление по клавише Delete
             // Не должно работать с корневым узлом
+            else
             if (e.KeyValue == (int)Keys.Delete && !RootNodeSelected)
+            {
                 if (tvObjectTree.SelectedNode is not null)
                     RemoveNode(tvObjectTree.SelectedNode);
+            }
+            else
+                // Чтобы избавиться от перехода между узлами при нажатии цифровых клавиш
+                e.SuppressKeyPress = true;
         }
 
         /// <summary>
@@ -434,6 +441,19 @@ namespace NoteManager
         private void OnFormShow(object sender, EventArgs e)
         {
             this.Text += $" версии {Application.ProductVersion}";
+        }
+
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        {
+            ncNote.SetObjectData(null);
+            if (_saveNotesOnCloseApplication)
+                DatabaseManager.SaveToDataBase();
+        }
+
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            ObjectDataManager.ObjectDataList.Clear();
+            ToastNotificationManagerCompat.Uninstall();
         }
     }
 }
