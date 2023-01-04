@@ -49,13 +49,14 @@
             // 
             // tsFunctions
             // 
+            this.tsFunctions.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.tsFunctions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsBtnAddNode,
             this.tsBtnRemoveNode});
             this.tsFunctions.Location = new System.Drawing.Point(0, 0);
             this.tsFunctions.Margin = new System.Windows.Forms.Padding(1);
             this.tsFunctions.Name = "tsFunctions";
-            this.tsFunctions.Size = new System.Drawing.Size(591, 25);
+            this.tsFunctions.Size = new System.Drawing.Size(675, 27);
             this.tsFunctions.TabIndex = 2;
             // 
             // tsBtnAddNode
@@ -67,20 +68,20 @@
             this.tsBtnAddNode.Image = global::NoteManager.Properties.Resources.AddIcon;
             this.tsBtnAddNode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnAddNode.Name = "tsBtnAddNode";
-            this.tsBtnAddNode.Size = new System.Drawing.Size(29, 22);
+            this.tsBtnAddNode.Size = new System.Drawing.Size(34, 24);
             // 
             // tsAddFolder
             // 
             this.tsAddFolder.Image = global::NoteManager.Properties.Resources.YoutubeIcon;
             this.tsAddFolder.Name = "tsAddFolder";
-            this.tsAddFolder.Size = new System.Drawing.Size(261, 22);
+            this.tsAddFolder.Size = new System.Drawing.Size(330, 26);
             this.tsAddFolder.Text = "Добавить ссылку на youtube";
             // 
             // tsAddNote
             // 
             this.tsAddNote.Image = global::NoteManager.Properties.Resources.pdfIcon;
             this.tsAddNote.Name = "tsAddNote";
-            this.tsAddNote.Size = new System.Drawing.Size(261, 22);
+            this.tsAddNote.Size = new System.Drawing.Size(330, 26);
             this.tsAddNote.Text = "Добавить источник данных из pdf";
             // 
             // tsBtnRemoveNode
@@ -89,7 +90,7 @@
             this.tsBtnRemoveNode.Image = global::NoteManager.Properties.Resources.RemoveIcon;
             this.tsBtnRemoveNode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnRemoveNode.Name = "tsBtnRemoveNode";
-            this.tsBtnRemoveNode.Size = new System.Drawing.Size(23, 22);
+            this.tsBtnRemoveNode.Size = new System.Drawing.Size(29, 24);
             this.tsBtnRemoveNode.Text = "Удалить выбраный узел";
             // 
             // listView1
@@ -101,8 +102,9 @@
             this.SourceDescription});
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.Location = new System.Drawing.Point(0, 0);
+            this.listView1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(591, 461);
+            this.listView1.Size = new System.Drawing.Size(675, 621);
             this.listView1.TabIndex = 3;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
@@ -126,9 +128,10 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(513, 3);
+            this.btnCancel.Location = new System.Drawing.Point(586, 4);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(86, 31);
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "Отмена";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -137,9 +140,10 @@
             // 
             this.panel1.Controls.Add(this.listView1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 25);
+            this.panel1.Location = new System.Drawing.Point(0, 27);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(591, 461);
+            this.panel1.Size = new System.Drawing.Size(675, 621);
             this.panel1.TabIndex = 5;
             // 
             // panel2
@@ -147,32 +151,35 @@
             this.panel2.Controls.Add(this.btnOK);
             this.panel2.Controls.Add(this.btnCancel);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 457);
+            this.panel2.Location = new System.Drawing.Point(0, 609);
+            this.panel2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(591, 29);
+            this.panel2.Size = new System.Drawing.Size(675, 39);
             this.panel2.TabIndex = 6;
             // 
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(432, 3);
+            this.btnOK.Location = new System.Drawing.Point(494, 4);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.Size = new System.Drawing.Size(86, 31);
             this.btnOK.TabIndex = 5;
             this.btnOK.Text = "ОК";
             this.btnOK.UseVisualStyleBackColor = true;
             // 
             // DataSourceForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(591, 486);
+            this.ClientSize = new System.Drawing.Size(675, 648);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tsFunctions);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "DataSourceForm";
-            this.Text = "DataSourceForm";
+            this.Text = "Источники данных";
             this.tsFunctions.ResumeLayout(false);
             this.tsFunctions.PerformLayout();
             this.panel1.ResumeLayout(false);

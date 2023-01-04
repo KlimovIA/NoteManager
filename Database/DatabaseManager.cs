@@ -8,12 +8,12 @@ using NoteManager.CommonTypes.Data.Debug;
 
 namespace NoteManager.Database
 {
-    internal class DatabaseManager
+    public static class DatabaseManager
     {
-        private readonly string _dataSourceConnectionString = "Data Source = Database.db3";
-        private SqliteConnection _connection;
-        private SqliteTransaction? _transaction;
-        public DatabaseManager()
+        private static readonly string _dataSourceConnectionString = "Data Source = Database.db3";
+        private static SqliteConnection _connection;
+        private static SqliteTransaction? _transaction;
+        static DatabaseManager()
         {
             _connection = new SqliteConnection(_dataSourceConnectionString);
             // Если у нас не будет существовать файла БД, то создаём и набиваем его таблицами
@@ -50,7 +50,7 @@ namespace NoteManager.Database
             }
         }
 
-        public void LoadObjectTreeFromDB()
+        public static void LoadObjectTreeFromDB()
         {
             // Заполним статический список, а в основной форме будем распаковывать
             using (SqliteConnection _connection = new SqliteConnection(_dataSourceConnectionString))
@@ -109,7 +109,7 @@ namespace NoteManager.Database
             }
         }
 
-        public bool SaveToDataBase()
+        public static bool SaveToDataBase()
         {
             try
             {
@@ -149,7 +149,7 @@ namespace NoteManager.Database
                     catch (Exception e)
                     {
 #if DEBUG
-                        Logger.WriteLogMessage(TypeDescriptor.GetClassName(this), e.Message);
+                        Logger.WriteLogMessage("DatabaseManager", e.Message);
 #endif
                         ActionNotification.ShowActionNotification(Constants.DataModificationNotDone, ActionNotification.NotificationResultType.ResultError);
                         _transaction.Rollback();
@@ -171,7 +171,7 @@ namespace NoteManager.Database
         /// будет добавлен в БД.
         /// </summary>
         /// <param name="node">Узел дерева</param>
-        private void AddNodeToDB(ObjectData objData)
+        private static void AddNodeToDB(ObjectData objData)
         {
             // Сохраняем узел
             int objectID = objData.ObjectID;
@@ -201,7 +201,7 @@ namespace NoteManager.Database
             objData.DataStatus = EDataStatus.DataNoneChange;
         }
 
-        private void DeleteNodeFromDB(ObjectData objData)
+        private static void DeleteNodeFromDB(ObjectData objData)
         {
             int objectID = objData.ObjectID;
 
@@ -218,7 +218,7 @@ namespace NoteManager.Database
             }
         }
 
-        private void UpdateNodeInDB(ObjectData objData)
+        private static void UpdateNodeInDB(ObjectData objData)
         {
             int objectID = objData.ObjectID;
             int parentID = objData.ParentID;

@@ -12,15 +12,13 @@ namespace NoteManager
     public partial class MainForm : Form
     {
         private ImageList? _imgTreeView;
-        private readonly DatabaseManager _databaseManager;
+
         private bool _saveNotesOnCloseApplication = false;
         public MainForm()
         {
             InitializeComponent();
             InitImageList();
             CreateMainRootNode();
-
-            _databaseManager = new DatabaseManager();
 
             LoadObjectsFromDatabase();
 #if DEBUG
@@ -47,7 +45,7 @@ namespace NoteManager
 
         private void LoadObjectsFromDatabase()
         {
-            _databaseManager.LoadObjectTreeFromDB();
+            DatabaseManager.LoadObjectTreeFromDB();
             // Подгружаем дерево из БД и заполняем программу. Сортируем объекты, чтобы не возникало
             // проблемы, при которой дерево некорректно строится после перемещения узлов перетягиванием.
             // Объект несортированного списка может попасть в метод добавления в дерево объектов раньше,
@@ -146,7 +144,7 @@ namespace NoteManager
         /// <returns></returns>
         private TreeNode? FindParentNode(TreeNode node, int ParentID)
         {
-
+            TreeNode? tmpNode;
             // Если в узле не нашли нужное значение, идём в дочерние узлы
             if (((ObjectData)node.Tag).ObjectID != ParentID)
             {
@@ -155,7 +153,11 @@ namespace NoteManager
                     if (((ObjectData)child.Tag).ObjectID != ParentID)
                     {
                         if (child.Nodes.Count != 0)
-                            return FindParentNode(child, ParentID);
+                        {
+                            tmpNode = FindParentNode(child, ParentID);
+                            if (tmpNode == null) continue;
+                            else return tmpNode;
+                        }
                     }
                     else
                         return child;
@@ -317,7 +319,7 @@ namespace NoteManager
         private async void SaveToDataBase(object sender, EventArgs e)
         {
             btnSaveToDB.Enabled = false;
-            _databaseManager.SaveToDataBase();
+            DatabaseManager.SaveToDataBase();
             await Task.Delay(5000);
             btnSaveToDB.Enabled = true;
         }
@@ -347,9 +349,15 @@ namespace NoteManager
 
             // Удаление по клавише Delete
             // Не должно работать с корневым узлом
+            else
             if (e.KeyValue == (int)Keys.Delete && !RootNodeSelected)
+            {
                 if (tvObjectTree.SelectedNode is not null)
                     RemoveNode(tvObjectTree.SelectedNode);
+            }
+            else
+                // Чтобы избавиться от перехода между узлами при нажатии цифровых клавиш
+                e.SuppressKeyPress = true;
         }
 
         /// <summary>
@@ -439,13 +447,13 @@ namespace NoteManager
         {
             ncNote.SetObjectData(null);
             if (_saveNotesOnCloseApplication)
-                new DatabaseManager().SaveToDataBase();
+                DatabaseManager.SaveToDataBase();
         }
 
         private void OnFormClosed(object sender, FormClosedEventArgs e)
         {
             ObjectDataManager.ObjectDataList.Clear();
-            ToastNotificationManagerCompat.Uninstall();           
+            ToastNotificationManagerCompat.Uninstall();
         }
     }
 }

@@ -84,7 +84,7 @@ namespace NoteManager.Visual
 
                     // Отмечаем, что данные обновились, и при сохранении в БД это нужно учитывать.          
                     // Но в случае, если узел только создан без сохранения в БД, то статус не меняем.
-                    if (_objectData.DataStatus != CommonTypes.Enums.EDataStatus.DataAdd)
+                    if (_objectData.DataStatus != CommonTypes.Enums.EDataStatus.DataAdd && _objectData.DataStatus != CommonTypes.Enums.EDataStatus.DataDelete)
                         _objectData.DataStatus = CommonTypes.Enums.EDataStatus.DataUpdate;
                 }
             }
